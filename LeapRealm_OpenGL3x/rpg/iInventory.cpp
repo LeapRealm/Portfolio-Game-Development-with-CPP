@@ -104,8 +104,9 @@ void iInventory::move(int selectedSlot, int selectingSlot)
 	}
 	else
 	{
-		inventoryUI->swap(&inventoryUI->slotIndexes[selectedSlot], 
-						  &inventoryUI->slotIndexes[selectingSlot]);
+		int* siA = &inventoryUI->slotIndexes[selectedSlot];
+		int* siB = &inventoryUI->slotIndexes[selectingSlot];
+		inventoryUI->swap(siA, siB);
 	}
 }
 

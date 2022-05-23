@@ -1,9 +1,9 @@
-#include "iSetting.h"
+#include "iSettingUI.h"
 
 #include "App.h"
-#include "iDimmed.h"
+#include "iDimmedUI.h"
 #include "iSound.h"
-#include "iTopMenu.h"
+#include "iTopMenuUI.h"
 #include "iUI.h"
 
 iPopup* settingUI;
@@ -18,7 +18,7 @@ void drawSettingBefore(float dt, iPopup* pop);
 
 float rangeBtn[2]; // min / max
 
-void loadSetting()
+void loadSettingUI()
 {
 	iPopup* pop = new iPopup();
 	iGraphics* g = new iGraphics();
@@ -208,7 +208,7 @@ void loadSetting()
 	delete g;
 }
 
-void freeSetting()
+void freeSettingUI()
 {
 	delete settingUI;
 	delete imgSettingBtn;
@@ -231,14 +231,14 @@ void drawSettingBefore(float dt, iPopup* pop)
 	}
 }
 
-void drawSetting(float dt)
+void drawSettingUI(float dt)
 {
 	settingUI->paint(dt);
 }
 
-bool settingDrag = false;
-iPoint prevPoint;
-bool keySetting(iKeyState state, iPoint p)
+static bool settingDrag = false;
+static iPoint prevPoint;
+bool keySettingUI(iKeyState state, iPoint p)
 {
 	if (settingUI->isShow == false)
 		return false;
@@ -271,8 +271,8 @@ bool keySetting(iKeyState state, iPoint p)
 		else
 		{
 			audioPlay(snd_eff_mouse_click);
-			showDimmed(false);
-			showSetting(false);
+			showDimmedUI(false);
+			showSettingUI(false);
 		}
 			
 		break;
@@ -336,7 +336,7 @@ bool keySetting(iKeyState state, iPoint p)
 	return true;
 }
 
-void showSetting(bool isShow)
+void showSettingUI(bool isShow)
 {
 	if (isShow)
 		settingUI->selected = -1;

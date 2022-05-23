@@ -25,7 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     WNDCLASSEXW wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
@@ -133,6 +133,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         keys[wParam] = false;
         break;
 
+    case WM_LBUTTONDBLCLK:
+		keyGame(iKeyStateDBCLK, convertCoordinate(LOWORD(lParam), HIWORD(lParam)));
+		break;
+
     case WM_LBUTTONDOWN:
         keyGame(iKeyStateBegan, convertCoordinate(LOWORD(lParam), HIWORD(lParam)));
         break;
@@ -151,15 +155,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_MOUSEWHEEL:
 	{
+		POINT p;
 		int zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 		switch (zDelta)
 		{
-		case  120:
-			printf("+1\n");
+		case +120:
+			
+			GetCursorPos(&p);
+			ScreenToClient(hWnd, &p);
+			keyGame(iKeyStateWheelBtnUp, convertCoordinate(p.x, p.y));
 			break;
 
 		case -120:
-			printf("-1\n");
+			GetCursorPos(&p);
+			ScreenToClient(hWnd, &p);
+			keyGame(iKeyStateWheelBtnDown, convertCoordinate(p.x, p.y));
 			break;
 		}
 		break;
@@ -212,11 +222,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CLOSE:
     {
-        int result = MessageBox(nullptr, L"Exit?", L"Exit", MB_YESNO);
-        if (result == IDYES)
-            runApp = false;
-        else
-            return 0;
+		runApp = false;
         break;
     }
 

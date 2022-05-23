@@ -55,8 +55,8 @@ iSTInfo stInfoTest[2][5] =
 			"assets/st/testI.glsl",
 			{nullptr, nullptr, nullptr, nullptr},
 			{BN, BN, BN, BN},
-			{Linear,	Linear,	Linear,	Linear},
-			{Clamp, Clamp,	Clamp, Clamp},
+			{Linear, Linear, Linear, Linear},
+			{Clamp,  Clamp,	 Clamp,  Clamp},
 		}
 	},
 
@@ -75,7 +75,6 @@ iSTInfo stInfoTest[2][5] =
 			{BA,							BN,			BN,			BN},
 			{Mipmap,						Linear,		Linear,		Linear},
 			{Clamp,							Clamp,		Clamp,		Clamp},
-
 		},
 		{
 			"assets/st/mountC.glsl",

@@ -1,24 +1,28 @@
 #include "iUI.h"
 
-#include "iDimmed.h"
+#include "iCaptionUI.h"
+#include "iDimmedUI.h"
 #include "iEquipUI.h"
 #include "iInventory.h"
 #include "iInventoryUI.h"
 #include "iItem.h"
-#include "iPause.h"
-#include "iQuickUI.h"
-#include "iSetting.h"
+#include "iLogUI.h"
+#include "iPauseUI.h"
+#include "iTestUI.h"
+#include "iSettingUI.h"
 #include "iSound.h"
-#include "iTopMenu.h"
+#include "iTopMenuUI.h"
 
 iLinkedList* listLayer;
 Layer* inventoryLayer;
 Layer* equipLayer;
-Layer* quickLayer;
+Layer* testLayer;
 
 void loadUI()
 {
-	loadTopMenu();
+	loadLogUI();
+
+	loadTopMenuUI();
 
 	loadItem();
 	loadInventory();
@@ -26,45 +30,50 @@ void loadUI()
 
 	loadEquipUI();
 
-	loadQuickUI();
+	loadTestUI();
 
-	createDimmed();
+	createDimmedUI();
 
-	loadPause();
-	loadSetting();
+	loadPauseUI();
+	loadSettingUI();
 
-	showTopMenu(true);
+	loadCaptionUI();
+
+	showTopMenuUI(true);
+	showLogUI(true);
 
 	listLayer = new iLinkedList();
 	inventoryLayer = new Layer();
 	equipLayer = new Layer();
-	quickLayer = new Layer();
+	testLayer = new Layer();
 
 	inventoryLayer->draw = drawInventoryUI;
 	inventoryLayer->key = keyInventoryUI;
 	equipLayer->draw = drawEquipUI;
 	equipLayer->key = keyEquipUI;
-	quickLayer->draw = drawQuickUI;
-	quickLayer->key = keyQuickUI;
+	testLayer->draw = drawTestUI;
+	testLayer->key = keyTestUI;
 
 	listLayer->addObject(inventoryLayer);
 	listLayer->addObject(equipLayer);
-	listLayer->addObject(quickLayer);
+	listLayer->addObject(testLayer);
 }
 
 void freeUI()
 {
-	delete quickLayer;
+	delete testLayer;
 	delete equipLayer;
 	delete inventoryLayer;
 	delete listLayer;
 
-	freeSetting();
-	freePause();
+	freeCaptionUI();
 
-	freeDimmed();
+	freeSettingUI();
+	freePauseUI();
 
-	freeQuickUI();
+	freeDimmedUI();
+
+	freeTestUI();
 
 	freeEquipUI();
 
@@ -72,12 +81,16 @@ void freeUI()
 	freeInventory();
 	freeItem();
 
-	freeTopMenu();
+	freeTopMenuUI();
+
+	freeLogUI();
 }
 
 void drawUI(float dt)
 {
-	drawTopMenu(dt);
+	drawLogUI(dt);
+
+	drawTopMenuUI(dt);
 
 	for (int i = 0; i < listLayer->count; i++)
 		((Layer*)listLayer->getObjectByIndex(i))->draw(dt);
@@ -85,16 +98,18 @@ void drawUI(float dt)
 	inventoryUI->paintAfter(dt);
 	equipUI->paintAfter(dt);
 
-	drawDimmed(dt);
+	drawDimmedUI(dt);
 
-	drawPause(dt);
-	drawSetting(dt);
+	drawPauseUI(dt);
+	drawSettingUI(dt);
+
+	drawCaptionUI(dt);
 }
 
 bool keyUI(iKeyState state, iPoint p)
 {
-	if (keyPause(state, p) || 
-		keySetting(state, p))
+	if (keyPauseUI(state, p) || 
+		keySettingUI(state, p))
 		return true;
 
 	for (int i = listLayer->count - 1; i > -1; i--)
@@ -103,7 +118,10 @@ bool keyUI(iKeyState state, iPoint p)
 			return true;
 	}
 
-	if (keyTopMenu(state, p))
+	if (keyTopMenuUI(state, p))
+		return true;
+
+	if (keyLogUI(state, p))
 		return true;
 
 	return false;

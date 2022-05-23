@@ -1,8 +1,10 @@
 #include "iEquipUI.h"
 
+#include "iCaptionUI.h"
 #include "iInventory.h"
 #include "iInventoryUI.h"
-#include "iTopMenu.h"
+#include "iLogUI.h"
+#include "iTopMenuUI.h"
 #include "iUI.h"
 
 iEquipUI::iEquipUI(): iItemUI(EquipSlotMaxCnt)
@@ -165,6 +167,9 @@ void iEquipUI::equip()
 	if ((int)(ei->equipKind) != selectingSlot)
 		return;
 
+	if (slotIndex == slotIndexes[selectingSlot])
+		return;
+
 	int* si = &slotIndexes[selectingSlot];
 
 	if (*si != -1)
@@ -187,6 +192,11 @@ void iEquipUI::equip()
 		audioPlay(snd_eff_cloth_equip);
 		break;
 	}
+
+	if (*si == -1)
+		addLogMessage(MsgAttrNotice, "'%s' 장착했습니다.", it->name->str);
+	else
+		addLogMessage(MsgAttrWarning, "'%s' 탈착 후 '%s' 장착했습니다.", items[inventory->slots[*si].itemIndex]->name->str, it->name->str);
 
 	*si = slotIndex;
 	inventory->slots[*si].isEquipped = true;
@@ -216,6 +226,8 @@ void iEquipUI::unequip()
 
 	sl->isEquipped = false;
 	slotIndexes[selectedSlot] = -1;
+
+	addLogMessage(MsgAttrGeneral, "'%s' 탈착했습니다.", it->name->str);
 }
 
 void iEquipUI::paint(float dt)
@@ -307,6 +319,9 @@ Texture* methodStrEquipSlot(const char* str)
 
 void drawEquipUIBefore(float dt, iPopup* pop)
 {
+	if (hoveredIndex != -1 && isInventory == false)
+		showCaptionUI(dt, inventory->slots[equipUI->slotIndexes[hoveredIndex]].itemIndex, mp);
+
 	for (int i = 0; i < equipUI->slotMaxCnt; i++)
 	{
 		if (equipUI->slotIndexes[i] != -1)
@@ -407,6 +422,19 @@ bool keyEquipUI(iKeyState state, iPoint p)
 		}
 
 		int j = -1;
+		if (inventoryUI->selectedSlot != -1)
+		{
+			for (int i = 0; i < equipUI->slotMaxCnt; i++)
+			{
+				if (containPoint(p, equipUI->imgSlots[i]->rect(equipUI->popup->closePoint)))
+				{
+					j = i;
+					break;
+				}
+			}
+		}
+		equipUI->selectingSlot = j;
+
 		if (equipUI->selectedSlot == -1)
 		{
 			j = -1;
@@ -419,21 +447,27 @@ bool keyEquipUI(iKeyState state, iPoint p)
 		{
 			selectedPos += (p - mousePosition);
 			mousePosition = p;
+			
+		}
 
-			j = -1;
-			if (containPoint(p, equipUI->imgBg->rect(equipUI->popup->closePoint)) == false)
+		j = -1;
+		if (equipUI->selectedSlot == -1 && equipUI->selectingSlot == -1)
+		{
+			for (int i = 0; i < equipUI->slotMaxCnt; i++)
 			{
-				for (int i = 0; i < inventoryUI->slotMaxCnt; i++)
+				if (containPoint(p, equipUI->imgSlots[i]->rect(equipUI->popup->closePoint)))
 				{
-					if (containPoint(p, inventoryUI->imgSlots[i]->rect(inventoryUI->popup->closePoint)))
+					if (equipUI->slotIndexes[i] != -1)
 					{
+						isInventory = false;
 						j = i;
 						break;
 					}
 				}
 			}
-			inventoryUI->selectingSlot = j;
 		}
+		hoveredIndex = j;
+		mp = p;
 		break;
 	}
 	
@@ -456,10 +490,38 @@ bool keyEquipUI(iKeyState state, iPoint p)
 		equipUI->unequip();
 		break; 
 	}
+	case iKeyStateDBCLK:
+	{
+		int j = -1;
+		for (int i = 0; i < equipUI->slotMaxCnt; i++)
+		{
+			if (containPoint(p, equipUI->imgSlots[i]->rect(equipUI->popup->closePoint)))
+			{
+				j = i;
+				break;
+			}
+		}
+
+		if (j != -1)
+		{
+			int slIdx = equipUI->slotIndexes[j];
+
+			if (slIdx != -1)
+			{
+				hoveredIndex = -1;
+				equipUI->selectedSlot = j;
+				equipUI->unequip();
+			}
+		}
+		break;
+	}
 	}
 
 	if (containPoint(p, equipUI->imgBg->rect(equipUI->popup->closePoint)))
+	{
+		inventoryUI->selectingSlot = -1;
 		return true;
+	}
 
 	return false;
 }

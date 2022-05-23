@@ -114,6 +114,30 @@ void iLinkedList::removeAllObjects()
 	count = 0;
 }
 
+void* iLinkedList::unlinkObject(int index)
+{
+	iNode* n = tail;
+	iNode* prevN = nullptr;
+	for (int i = count - 1; i > -1; i--)
+	{
+		if (i == index)
+		{
+			if (prevN)
+				prevN->prev = n->prev;
+			else
+				tail = n->prev;
+
+			void* data = n->data;
+			delete(n);
+
+			count--;
+			return data;
+		}
+		prevN = n;
+		n = n->prev;
+	}
+}
+
 void* iLinkedList::getObjectByIndex(int index)
 {
 	iNode* n = tail;

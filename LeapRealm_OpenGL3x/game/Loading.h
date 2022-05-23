@@ -7,6 +7,8 @@ enum iGameState
 	iGameStateMenu = 0,
 	iGameStateMap,
 
+	iGameStateST,
+
 	iGameStateNone
 
 };

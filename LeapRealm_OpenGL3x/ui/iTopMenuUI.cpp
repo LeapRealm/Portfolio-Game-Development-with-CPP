@@ -1,11 +1,11 @@
-#include "iTopMenu.h"
+#include "iTopMenuUI.h"
 
-#include "iDimmed.h"
+#include "iDimmedUI.h"
 #include "iEquipUI.h"
 #include "iInventoryUI.h"
-#include "iPause.h"
-#include "iQuickUI.h"
-#include "iSetting.h"
+#include "iPauseUI.h"
+#include "iTestUI.h"
+#include "iSettingUI.h"
 #include "iWindow.h"
 
 #define TopMenuHeight 80
@@ -15,7 +15,7 @@ iImage** imgTopMenuBtn;
 
 void drawTopMenuBefore(float dt, iPopup* pop);
 
-void loadTopMenu()
+void loadTopMenuUI()
 {
 	iPopup* pop = new iPopup();
 	iGraphics* g = new iGraphics();
@@ -85,7 +85,7 @@ void loadTopMenu()
 	delete g;
 }
 
-void freeTopMenu()
+void freeTopMenuUI()
 {
 	delete topMenuUI;
 	delete imgTopMenuBtn;
@@ -97,12 +97,12 @@ void drawTopMenuBefore(float dt, iPopup* pop)
 		imgTopMenuBtn[i]->frame = (i == topMenuUI->selected);
 }
 
-void drawTopMenu(float dt)
+void drawTopMenuUI(float dt)
 {
 	topMenuUI->paint(dt);
 }
 
-bool keyTopMenu(iKeyState state, iPoint p)
+bool keyTopMenuUI(iKeyState state, iPoint p)
 {
 	if (topMenuUI->isShow == false)
 		return false;
@@ -122,8 +122,8 @@ bool keyTopMenu(iKeyState state, iPoint p)
 		if (s == 0)
 		{
 			audioPlay(snd_eff_mouse_click);
-			showDimmed(true);
-			showPause(true);
+			showDimmedUI(true);
+			showPauseUI(true);
 		}
 		else if (s == 1)
 		{
@@ -135,13 +135,13 @@ bool keyTopMenu(iKeyState state, iPoint p)
 		}
 		else if (s == 3)
 		{
-			showQuickUI(true);
+			showTestUI(true);
 		}
 		else
 		{
 			audioPlay(snd_eff_mouse_click);
-			showDimmed(true);
-			showSetting(true);
+			showDimmedUI(true);
+			showSettingUI(true);
 		}
 		break;
 	}
@@ -171,10 +171,10 @@ bool keyTopMenu(iKeyState state, iPoint p)
 	}
 	}
 
-	return true;
+	return false;
 }
 
-void showTopMenu(bool isShow)
+void showTopMenuUI(bool isShow)
 {
 	topMenuUI->show(isShow);
 }

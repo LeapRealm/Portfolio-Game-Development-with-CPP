@@ -72,7 +72,7 @@
     <ClInclude Include="std\iUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rpg\iCaption.h">
+    <ClInclude Include="rpg\iCaptionUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rpg\iEquipUI.h">
@@ -90,22 +90,22 @@
     <ClInclude Include="rpg\iItemUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rpg\iQuickUI.h">
+    <ClInclude Include="rpg\iTestUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\iDimmed.h">
+    <ClInclude Include="ui\iDimmedUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\iPause.h">
+    <ClInclude Include="ui\iPauseUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\iSetting.h">
+    <ClInclude Include="ui\iSettingUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui\iTopMenu.h">
+    <ClInclude Include="ui\iTopMenuUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ui\iUI.h">
@@ -133,6 +133,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rpg\iLogUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -201,7 +204,7 @@
     <ClCompile Include="std\iUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rpg\iCaption.cpp">
+    <ClCompile Include="rpg\iCaptionUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rpg\iEquipUI.cpp">
@@ -219,22 +222,22 @@
     <ClCompile Include="rpg\iItemUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rpg\iQuickUI.cpp">
+    <ClCompile Include="rpg\iTestUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\iDimmed.cpp">
+    <ClCompile Include="ui\iDimmedUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\iPause.cpp">
+    <ClCompile Include="ui\iPauseUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\iSetting.cpp">
+    <ClCompile Include="ui\iSettingUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui\iTopMenu.cpp">
+    <ClCompile Include="ui\iTopMenuUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ui\iUI.cpp">
@@ -265,6 +268,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rpg\iLogUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,10 +1,10 @@
-#include "iDimmed.h"
+#include "iDimmedUI.h"
 
-#include "iTopMenu.h"
+#include "iTopMenuUI.h"
 
-iPopup* dimmed;
+iPopup* dimmedUI;
 
-void createDimmed()
+void createDimmedUI()
 {
 	iPopup* pop = new iPopup();
 
@@ -28,24 +28,24 @@ void createDimmed()
 	pop->openPoint = iPointZero;
 	pop->closePoint = iPointZero;
 
-	dimmed = pop;
+	dimmedUI = pop;
 	delete g;
 }
 
-void freeDimmed()
+void freeDimmedUI()
 {
-	delete dimmed;
+	delete dimmedUI;
 }
 
-void drawDimmed(float dt)
+void drawDimmedUI(float dt)
 {
-	dimmed->paint(dt);
+	dimmedUI->paint(dt);
 }
 
-void showDimmed(bool isShow)
+void showDimmedUI(bool isShow)
 {
 	if (isShow == false)
 		topMenuUI->selected = -1;
 
-	dimmed->show(isShow);
+	dimmedUI->show(isShow);
 }

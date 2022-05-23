@@ -4,6 +4,9 @@
 #include "iInventoryUI.h"
 
 iPoint selectedPos, mousePosition;
+iPoint mp = iPointZero;
+int hoveredIndex = -1;
+bool isInventory = false;
 
 iItemUI::iItemUI(int slotMaxCnt)
 {

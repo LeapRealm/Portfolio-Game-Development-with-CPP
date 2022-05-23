@@ -1,17 +1,19 @@
-#include "iQuickUI.h"
+#include "iTestUI.h"
 
-#include "iTopMenu.h"
+#include "iEquipUI.h"
+#include "iInventoryUI.h"
+#include "iTopMenuUI.h"
 #include "iUI.h"
 
-iQuickUI::iQuickUI() : iItemUI(0)
+iTestUI::iTestUI() : iItemUI(0)
 {
 }
 
-iQuickUI::~iQuickUI()
+iTestUI::~iTestUI()
 {
 }
 
-void iQuickUI::setPopup()
+void iTestUI::setPopup()
 {
 	iGraphics* g = new iGraphics();
 
@@ -71,117 +73,122 @@ void iQuickUI::setPopup()
 	popup->style = iPopupStyleAlpha;
 	popup->openPoint = imgTopMenuBtn[3]->center(topMenuUI->closePoint);
 	popup->closePoint = iPointMake((devSize.width - 380) - 50, (devSize.height - 320) / 3);
-	popup->methodDrawBefore = drawQuickUIBefore;
+	popup->methodDrawBefore = drawTestUIBefore;
 
 	delete bg;
 	delete close;
 	delete g;
 }
 
-void iQuickUI::paint(float dt)
+void iTestUI::paint(float dt)
 {
 	popup->paint(dt);
 }
 
-void iQuickUI::paintAfter(float dt)
+void iTestUI::paintAfter(float dt)
 {
 
 }
 
-void drawQuickUIBefore(float dt, iPopup* pop)
+void drawTestUIBefore(float dt, iPopup* pop)
 {
-	quickUI->imgBtn->frame = (0 == quickUI->popup->selected);
+	testUI->imgBtn->frame = (0 == testUI->popup->selected);
 }
 
-iQuickUI* quickUI;
+iTestUI* testUI;
 
-void loadQuickUI()
+void loadTestUI()
 {
-	quickUI = new iQuickUI();
-	quickUI->setPopup();
+	testUI = new iTestUI();
+	testUI->setPopup();
 }
 
-void freeQuickUI()
+void freeTestUI()
 {
-	delete quickUI;
+	delete testUI;
 }
 
-void drawQuickUI(float dt)
+void drawTestUI(float dt)
 {
-	quickUI->paint(dt);
+	testUI->paint(dt);
 }
 
-bool keyQuickUI(iKeyState state, iPoint p)
+bool keyTestUI(iKeyState state, iPoint p)
 {
-	if (quickUI->popup->isShow == false)
+	if (testUI->popup->isShow == false)
 		return false;
-	if (quickUI->popup->state != iPopupStateProc)
+	if (testUI->popup->state != iPopupStateProc)
 		return true;
 
 	switch (state)
 	{
 	case iKeyStateBegan:
 	{
-		if (containPoint(p, quickUI->imgBg->rect(quickUI->popup->closePoint)))
+		if (containPoint(p, testUI->imgBg->rect(testUI->popup->closePoint)))
 		{
-			listLayer->removeObject(quickLayer);
-			listLayer->addObject(quickLayer);
+			listLayer->removeObject(testLayer);
+			listLayer->addObject(testLayer);
 		}
 
-		if (containPoint(p, iRectMake(quickUI->popup->closePoint.x, quickUI->popup->closePoint.y, 300, 75)))
+		if (containPoint(p, iRectMake(testUI->popup->closePoint.x, testUI->popup->closePoint.y, 300, 75)))
 		{
-			quickUI->isClicked = true;
-			selectedPos = quickUI->popup->closePoint;
+			testUI->isClicked = true;
+			selectedPos = testUI->popup->closePoint;
 			mousePosition = p;
 			break;
 		}
 
-		int s = quickUI->popup->selected;
+		int s = testUI->popup->selected;
 		if (s == 0)
 		{
 			audioPlay(snd_eff_chest_close);
-			showQuickUI(false);
+			showTestUI(false);
 		}
 		break;
 	}
 
 	case iKeyStateMoved:
 	{
-		if (quickUI->isClicked)
+		if (testUI->isClicked)
 		{
 			selectedPos += (p - mousePosition);
-			quickUI->popup->closePoint = selectedPos;
+			testUI->popup->closePoint = selectedPos;
 			mousePosition = p;
 			break;
 		}
 
 		int j = -1;
-		if (containPoint(p, quickUI->imgBtn->rect(quickUI->popup->closePoint)))
+		if (containPoint(p, testUI->imgBtn->rect(testUI->popup->closePoint)))
 			j = 0;
-		quickUI->popup->selected = j;
+		testUI->popup->selected = j;
 		break;
 	}
 
 	case iKeyStateEnded:
 	{
-		if (quickUI->isClicked)
+		if (testUI->isClicked)
 		{
-			quickUI->isClicked = false;
+			testUI->isClicked = false;
 			break;
 		}
 		break;
 	}
 	}
 
-	if (containPoint(p, quickUI->imgBg->rect(quickUI->popup->closePoint)))
+	if (containPoint(p, testUI->imgBg->rect(testUI->popup->closePoint)))
+	{
+		hoveredIndex = -1;
+		inventoryUI->selectingSlot = -1;
+		equipUI->selectingSlot = -1;
 		return true;
+	}
 
 	return false;
 }
 
-void showQuickUI(bool isShow)
+void showTestUI(bool isShow)
 {
-	if (isShow == quickUI->popup->isShow)
+	if (isShow == testUI->popup->isShow)
 		isShow = !isShow;
 
 	if (isShow)
@@ -189,5 +196,5 @@ void showQuickUI(bool isShow)
 	else
 		audioPlay(snd_eff_chest_close);
 
-	quickUI->popup->show(isShow);
+	testUI->popup->show(isShow);
 }

@@ -1,9 +1,10 @@
 #include "iInventoryUI.h"
 
-#include "iCaption.h"
+#include "iCaptionUI.h"
 #include "iEquipUI.h"
 #include "iInventory.h"
-#include "iTopMenu.h"
+#include "iLogUI.h"
+#include "iTopMenuUI.h"
 #include "iUI.h"
 
 iInventoryUI::iInventoryUI(): iItemUI(InvenSlotMaxCnt)
@@ -216,6 +217,11 @@ void iInventoryUI::sort(iSortBy sortBy = iSortByGrade, bool isDesc = true)
 
 	for(int i = 0; i < sort.sdNum; i++)
 		slotIndexes[isDesc ? i : sort.sdNum - 1 - i] = sort.getIndex(i);
+
+	if (isDesc)
+		addLogMessage(MsgAttrWarning, "등급을 기준으로 내림차순 정렬했습니다.");
+	else
+		addLogMessage(MsgAttrNotice, "등급을 기준으로 오름차순 정렬했습니다.");
 }
 
 void iInventoryUI::paint(float dt)
@@ -315,14 +321,10 @@ Texture* methodStrInvenSlot(const char* str)
 	return tex;
 }
 
-iPoint mp = iPointZero;
-int itemIndex = -1;
 void drawInventoryUIBefore(float dt, iPopup* pop)
 {
-	if (itemIndex != -1)
-		showCaptionUI(dt, inventory->slots[inventoryUI->slotIndexes[itemIndex]].itemIndex, mp);
-	else
-		showCaptionUI(dt, -1, mp);
+	if (hoveredIndex != -1 && isInventory)
+		showCaptionUI(dt, inventory->slots[inventoryUI->slotIndexes[hoveredIndex]].itemIndex, mp);
 
 	for (int i = 0; i < inventoryUI->slotMaxCnt; i++)
 	{
@@ -424,8 +426,20 @@ bool keyInventoryUI(iKeyState state, iPoint p)
 			mousePosition = p;
 			break;
 		}
+		int j = -1;
+		if (equipUI->selectedSlot != -1)
+		{
+			for (int i = 0; i < inventoryUI->slotMaxCnt; i++)
+			{
+				if (containPoint(p, inventoryUI->imgSlots[i]->rect(inventoryUI->popup->closePoint)))
+				{
+					j = i;
+					break;
+				}
+			}
+		}
+		inventoryUI->selectingSlot = j;
 
-		int j;
 		if (inventoryUI->selectedSlot == -1)
 		{
 			j = -1;
@@ -454,20 +468,6 @@ bool keyInventoryUI(iKeyState state, iPoint p)
 				}
 			}
 			inventoryUI->selectingSlot = j;
-
-			j = -1;
-			if (containPoint(p, inventoryUI->imgBg->rect(inventoryUI->popup->closePoint)) == false)
-			{
-				for (int i = 0; i < equipUI->slotMaxCnt; i++)
-				{
-					if (containPoint(p, equipUI->imgSlots[i]->rect(equipUI->popup->closePoint)))
-					{
-						j = i;
-						break;
-					}
-				}
-			}
-			equipUI->selectingSlot = j;
 		}
 
 		j = -1;
@@ -479,14 +479,14 @@ bool keyInventoryUI(iKeyState state, iPoint p)
 				{
 					if (inventory->slots[inventoryUI->slotIndexes[i]].itemCount != 0)
 					{
+						isInventory = true;
 						j = i;
 						break;
 					}
 				}
 			}
 		}
-
-		itemIndex = j;
+		hoveredIndex = j;
 		mp = p;
 		break;
 	}
@@ -515,10 +515,72 @@ bool keyInventoryUI(iKeyState state, iPoint p)
 		}
 		break;
 	}
+
+	case iKeyStateDBCLK:
+	{
+		int j = -1;
+		for (int i = 0; i < inventoryUI->slotMaxCnt; i++)
+		{
+			if (containPoint(p, inventoryUI->imgSlots[i]->rect(inventoryUI->popup->closePoint)))
+			{
+				j = i;
+				break;
+			}
+		}
+
+		if (j != -1)
+		{
+			int slIdx = inventoryUI->slotIndexes[j];
+			iSlot* sl = &inventory->slots[slIdx];
+			int& itCnt = sl->itemCount;
+
+			if (itCnt > 0)
+			{
+				int idx = sl->itemIndex;
+				iItem* it = items[idx];
+
+				switch (it->itemKind)
+				{
+				case iItemKindEquip:
+				{
+					iEquipKind ek = ((iEquipItem*)it)->equipKind;
+
+					if (sl->isEquipped)
+					{
+						equipUI->selectedSlot = (int)ek;
+						equipUI->unequip();
+					}
+					else
+					{
+						inventoryUI->selectedSlot = j;
+
+						equipUI->selectingSlot = (int)ek;
+						equipUI->equip();
+					}
+					break;
+				}
+
+				case iItemKindConsume:
+				{
+					// TODO: consume sfx play
+					itCnt--;
+					addLogMessage(MsgAttrGeneral, "'%s' 아이템을 사용했습니다.", it->name->str);
+					if (itCnt == 0)
+						hoveredIndex = -1;
+					break;
+				}
+				}
+			}
+		}
+		break;
+	}
 	}
 
 	if (containPoint(p, inventoryUI->imgBg->rect(inventoryUI->popup->closePoint)))
+	{
+		equipUI->selectingSlot = -1;
 		return true;
+	}
 
 	return false;
 }

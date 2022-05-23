@@ -38,6 +38,8 @@ const char* strFragHead = "						  \
 	uniform sampler2D iChannel3;        		\n\
 	uniform vec4      iDate;					\n\
 	uniform float     iSampleRate;				\n\
+	uniform float	  iActionKeys[5];			\n\
+	uniform float	  iAxisKeys[5];				\n\
 												\n\
 	out vec4 fragColor;							\n\
 ";
@@ -229,6 +231,30 @@ void iShadertoy::paint(float dt)
 		float iSampleRate = 1.0f;
 		uid = glGetUniformLocation(id, "iSampleRate");
 		glUniform1f(uid, iSampleRate);
+
+#if 1
+		float iActionKeys[5] = 
+		{
+			(float)getActionKeyPressed(KEY_LEFT),
+			(float)getActionKeyPressed(KEY_UP),
+			(float)getActionKeyPressed(KEY_RIGHT),
+			(float)getActionKeyPressed(KEY_DOWN),
+			(float)getActionKeyPressed(KEY_SPACE),
+		};
+		uid = glGetUniformLocation(id, "iActionKeys");
+		glUniform1fv(uid, 5, iActionKeys);
+
+		float iAxisKeys[5] =
+		{
+			(float)getAxisKeyPressed(KEY_LEFT),
+			(float)getAxisKeyPressed(KEY_UP),
+			(float)getAxisKeyPressed(KEY_RIGHT),
+			(float)getAxisKeyPressed(KEY_DOWN),
+			(float)getAxisKeyPressed(KEY_SPACE),
+		};
+		uid = glGetUniformLocation(id, "iAxisKeys");
+		glUniform1fv(uid, 5, iAxisKeys);
+#endif
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbe);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr);

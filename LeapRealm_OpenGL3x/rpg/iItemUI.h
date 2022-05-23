@@ -27,4 +27,8 @@ struct iItemUI
 
 extern iPoint selectedPos, mousePosition;
 
+extern iPoint mp;
+extern int hoveredIndex;
+extern bool isInventory;
+
 void resetFlags();

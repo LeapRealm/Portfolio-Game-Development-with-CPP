@@ -21,6 +21,8 @@ public:
 	void removeObject(void* data);
 	void removeAllObjects();
 
+	void* unlinkObject(int index);
+
 	void* getObjectByIndex(int index);
 
 public:

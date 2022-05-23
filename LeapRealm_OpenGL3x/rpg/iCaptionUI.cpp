@@ -1,9 +1,10 @@
-#include "iCaption.h"
+#include "iCaptionUI.h"
 
 #include "iItem.h"
+#include "iItemUI.h"
 
-iPopup* popCaption;
-iStrTex* stCaption;
+iPopup* popCaptionUI;
+iStrTex* strCaption;
 Texture* methodStrCaption(const char* str);
 
 void loadCaptionUI()
@@ -15,19 +16,19 @@ void loadCaptionUI()
 	iStrTex* st = new iStrTex(methodStrCaption);
 	st->setString("Item_Info");
 	img->addTexture(st->tex);
-	stCaption = st;
+	strCaption = st;
 
 	pop->addImage(img);
 
 	pop->style = iPopupStyleAlpha;
 	pop->animDt = 0.1f;
-	popCaption = pop;
+	popCaptionUI = pop;
 }
 
 void freeCaptionUI()
 {
-	delete stCaption;
-	delete popCaption;
+	delete strCaption;
+	delete popCaptionUI;
 }
 
 Texture* methodStrCaption(const char* str)
@@ -77,7 +78,10 @@ Texture* methodStrCaption(const char* str)
 
 void drawCaptionUI(float dt)
 {
-	popCaption->paint(dt);
+	if (hoveredIndex == -1)
+		showCaptionUI(dt, -1, mp);
+
+	popCaptionUI->paint(dt);
 }
 
 int prevItemIdx = -1;
@@ -87,7 +91,7 @@ void showCaptionUI(float dt, int itemIndex, iPoint p)
 {
 	if (itemIndex == -1 || (itemIndex != prevItemIdx && p != prevP))
 	{
-		popCaption->show(false);
+		popCaptionUI->show(false);
 
 		showDt = 0;
 		prevP = p;
@@ -122,19 +126,19 @@ void showCaptionUI(float dt, int itemIndex, iPoint p)
 
 		iString* s = new iString("이름 : %s\n설명 : %s\n등급 : %s\n종류 : %s\n가격 : %d\n최대 스택 개수 : %d\n%d",
 			it->name->str, it->desc->str, grade, kind, it->price, it->stackCntMax, it->grade);
-		stCaption->setString(s->str);
+		strCaption->setString(s->str);
 		delete s;
 	}
 
 	iPoint pos = p;
-	if (p.x > devSize.width - stCaption->tex->width - 35)
-		pos.x -= (stCaption->tex->width + 35);
-	if (p.y > devSize.height - stCaption->tex->height)
-		pos.y -= (stCaption->tex->height);
+	if (p.x > devSize.width - strCaption->tex->width - 35)
+		pos.x -= (strCaption->tex->width + 35);
+	if (p.y > devSize.height - strCaption->tex->height)
+		pos.y -= (strCaption->tex->height);
 
-	popCaption->openPoint = popCaption->closePoint = iPointMake(pos.x + 35, pos.y);
+	popCaptionUI->openPoint = popCaptionUI->closePoint = iPointMake(pos.x + 35, pos.y);
 
-	popCaption->show(true);
+	popCaptionUI->show(true);
 
 	prevItemIdx = itemIndex;
 	prevP = p;

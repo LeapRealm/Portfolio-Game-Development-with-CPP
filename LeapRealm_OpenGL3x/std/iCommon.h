@@ -25,6 +25,9 @@ enum iKeyState
 	iKeyStateBegan = 0,
 	iKeyStateMoved,
 	iKeyStateEnded,
+	iKeyStateDBCLK,
+	iKeyStateWheelBtnUp,
+	iKeyStateWheelBtnDown,
 };
 
 #define LEFT			 1

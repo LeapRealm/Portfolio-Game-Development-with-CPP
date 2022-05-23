@@ -18,8 +18,8 @@ iItem::iItem()
 	 
 	image = nullptr;
 
-	name = new iString("");
-	desc = new iString("");
+	name = nullptr;
+	desc = nullptr;
 
 	grade = iItemGradeCommon;
 	price = 0;
@@ -61,7 +61,6 @@ void loadItem()
 		items[index]->price = (i + 1) * 100;
 		items[index]->stackCntMax = 1;
 		((iEquipItem*)items[index])->equipKind = iEquipKindSword;
-
 		items[index]->image = iGraphics::createIgImage("assets/ui/item/sword_icon_%d.png", i);
 	}
 
@@ -79,7 +78,6 @@ void loadItem()
 		items[index]->price = (i + 1) * 100;
 		items[index]->stackCntMax = 1;
 		((iEquipItem*)items[index])->equipKind = iEquipKindShield;
-
 		items[index]->image = iGraphics::createIgImage("assets/ui/item/shield_icon_%d.png", i);
 	}
 
@@ -97,7 +95,6 @@ void loadItem()
 		items[index]->price = (i + 1) * 100;
 		items[index]->stackCntMax = 1;
 		((iEquipItem*)items[index])->equipKind = iEquipKindHelmet;
-
 		items[index]->image = iGraphics::createIgImage("assets/ui/item/helmet_icon_%d.png", i);
 	}
 
@@ -115,7 +112,6 @@ void loadItem()
 		items[index]->price = (i + 1) * 100;
 		items[index]->stackCntMax = 1;
 		((iEquipItem*)items[index])->equipKind = iEquipKindChest;
-
 		items[index]->image = iGraphics::createIgImage("assets/ui/item/chest_icon_%d.png", i);
 	}
 
@@ -131,9 +127,8 @@ void loadItem()
 		items[index]->desc = new iString("potion_%d_desc", i);
 		items[index]->grade = (iItemGrade)(i % 2);
 		items[index]->price = (i + 1) * 100;
-		items[index]->stackCntMax = 5;
+		items[index]->stackCntMax = 3 + i;
 		((iConsumeItem*)items[index])->duration = (i % 2 + 1) * 3.0f;
-
 		items[index]->image = iGraphics::createIgImage("assets/ui/item/potion_icon_%d.png", i);
 	}
 }

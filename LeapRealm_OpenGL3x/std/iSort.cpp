@@ -26,6 +26,7 @@ void iSort::add(int index, int value)
 
 void iSort::update()
 {
+#if 1
 	// 버블소팅
 	for (int j = sdNum - 1; j > -1; j--)
 	{
@@ -39,6 +40,12 @@ void iSort::update()
 			}
 		}
 	}
+
+#elif
+	// TODO: 퀵소팅
+
+	
+#endif
 }
  
 int iSort::getIndex(int index)

@@ -1,15 +1,15 @@
-#include "iPause.h"
+#include "iPauseUI.h"
 
 #include "App.h"
-#include "iDimmed.h"
-#include "iTopMenu.h"
+#include "iDimmedUI.h"
+#include "iTopMenuUI.h"
 
 iPopup* pauseUI;
 iImage** imgPauseBtn;
 
 void drawPauseBefore(float dt, iPopup* pop);
 
-void loadPause()
+void loadPauseUI()
 {
 	iPopup* pop = new iPopup();
 	iGraphics* g = new iGraphics();
@@ -99,7 +99,7 @@ void loadPause()
 	delete g;
 }
 
-void freePause()
+void freePauseUI()
 {
 	delete pauseUI;
 	delete imgPauseBtn;
@@ -111,12 +111,12 @@ void drawPauseBefore(float dt, iPopup* pop)
 		imgPauseBtn[i]->frame = (i == pauseUI->selected);
 }
 
-void drawPause(float dt)
+void drawPauseUI(float dt)
 {
 	pauseUI->paint(dt);
 }
 
-bool keyPause(iKeyState state, iPoint p)
+bool keyPauseUI(iKeyState state, iPoint p)
 {
 	if (pauseUI->isShow == false)
 		return false;
@@ -138,8 +138,8 @@ bool keyPause(iKeyState state, iPoint p)
 			audioPlay(snd_eff_mouse_click);
 			topMenuUI->selected = -1;
 			pauseUI->selected = -1;
-			showDimmed(false);
-			showPause(false);
+			showDimmedUI(false);
+			showPauseUI(false);
 		}
 		else if (s == 1)
 		{
@@ -182,7 +182,7 @@ bool keyPause(iKeyState state, iPoint p)
 	return true;
 }
 
-void showPause(bool isShow)
+void showPauseUI(bool isShow)
 {
 	if (isShow)
 		pauseUI->selected = -1;

@@ -152,13 +152,14 @@
     <ClInclude Include="game\Map.h" />
     <ClInclude Include="iWindow.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="rpg\iCaption.h" />
+    <ClInclude Include="rpg\iCaptionUI.h" />
     <ClInclude Include="rpg\iEquipUI.h" />
     <ClInclude Include="rpg\iInventory.h" />
     <ClInclude Include="rpg\iInventoryUI.h" />
     <ClInclude Include="rpg\iItem.h" />
     <ClInclude Include="rpg\iItemUI.h" />
-    <ClInclude Include="rpg\iQuickUI.h" />
+    <ClInclude Include="rpg\iLogUI.h" />
+    <ClInclude Include="rpg\iTestUI.h" />
     <ClInclude Include="std\iColor.h" />
     <ClInclude Include="std\iCommon.h" />
     <ClInclude Include="std\iGraphics.h" />
@@ -180,10 +181,10 @@
     <ClInclude Include="std\iString.h" />
     <ClInclude Include="std\iStrTex.h" />
     <ClInclude Include="std\iUtil.h" />
-    <ClInclude Include="ui\iDimmed.h" />
-    <ClInclude Include="ui\iPause.h" />
-    <ClInclude Include="ui\iSetting.h" />
-    <ClInclude Include="ui\iTopMenu.h" />
+    <ClInclude Include="ui\iDimmedUI.h" />
+    <ClInclude Include="ui\iPauseUI.h" />
+    <ClInclude Include="ui\iSettingUI.h" />
+    <ClInclude Include="ui\iTopMenuUI.h" />
     <ClInclude Include="ui\iUI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -201,13 +202,14 @@
     <ClCompile Include="game\Map.cpp" />
     <ClCompile Include="glew.c" />
     <ClCompile Include="iWindow.cpp" />
-    <ClCompile Include="rpg\iCaption.cpp" />
+    <ClCompile Include="rpg\iCaptionUI.cpp" />
     <ClCompile Include="rpg\iEquipUI.cpp" />
     <ClCompile Include="rpg\iInventory.cpp" />
     <ClCompile Include="rpg\iInventoryUI.cpp" />
     <ClCompile Include="rpg\iItem.cpp" />
     <ClCompile Include="rpg\iItemUI.cpp" />
-    <ClCompile Include="rpg\iQuickUI.cpp" />
+    <ClCompile Include="rpg\iLogUI.cpp" />
+    <ClCompile Include="rpg\iTestUI.cpp" />
     <ClCompile Include="std\iColor.cpp" />
     <ClCompile Include="std\iGraphics.cpp" />
     <ClCompile Include="std\iImage.cpp" />
@@ -228,10 +230,10 @@
     <ClCompile Include="std\iString.cpp" />
     <ClCompile Include="std\iStrTex.cpp" />
     <ClCompile Include="std\iUtil.cpp" />
-    <ClCompile Include="ui\iDimmed.cpp" />
-    <ClCompile Include="ui\iPause.cpp" />
-    <ClCompile Include="ui\iSetting.cpp" />
-    <ClCompile Include="ui\iTopMenu.cpp" />
+    <ClCompile Include="ui\iDimmedUI.cpp" />
+    <ClCompile Include="ui\iPauseUI.cpp" />
+    <ClCompile Include="ui\iSettingUI.cpp" />
+    <ClCompile Include="ui\iTopMenuUI.cpp" />
     <ClCompile Include="ui\iUI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
