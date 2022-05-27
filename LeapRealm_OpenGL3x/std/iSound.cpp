@@ -13,5 +13,6 @@ AudioInfo ai[snd_max] = {
 	{(char*)"assets/sounds/shield_unequip.wav", false, 1.0f},
 	{(char*)"assets/sounds/sword_equip.wav", false, 1.0f},
 	{(char*)"assets/sounds/sword_unequip.wav", false, 1.0f},
+	{(char*)"assets/sounds/potion_drink.wav", false, 1.0f},
 	{(char*)"assets/sounds/bgm_main.wav", true, 1.0f},
 };

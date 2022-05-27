@@ -9,7 +9,7 @@
 void loadGame()
 {
 	loadAudio(ai, snd_max);
-	audioVolume(1, 1, snd_eff_max);
+	audioVolume(0.7f, 0.7f, snd_eff_max);
 	audioPlay(snd_bgm_main);
 
 	gs = iGameStateMap;

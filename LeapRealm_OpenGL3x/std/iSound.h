@@ -16,6 +16,7 @@ enum iSound
 	snd_eff_shield_unequip,
 	snd_eff_sword_equip,
 	snd_eff_sword_unequip,
+	snd_eff_potion_drink,
 	snd_eff_max,
 
 	snd_bgm_main = snd_eff_max,

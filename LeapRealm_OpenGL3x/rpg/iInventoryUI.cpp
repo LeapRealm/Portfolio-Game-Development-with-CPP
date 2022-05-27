@@ -562,8 +562,8 @@ bool keyInventoryUI(iKeyState state, iPoint p)
 
 				case iItemKindConsume:
 				{
-					// TODO: consume sfx play
 					itCnt--;
+					audioPlay(snd_eff_potion_drink);
 					addLogMessage(MsgAttrGeneral, "'%s' 아이템을 사용했습니다.", it->name->str);
 					if (itCnt == 0)
 						hoveredIndex = -1;
