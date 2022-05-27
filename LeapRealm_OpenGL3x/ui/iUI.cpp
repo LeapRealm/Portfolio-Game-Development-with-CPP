@@ -8,7 +8,7 @@
 #include "iItem.h"
 #include "iLogUI.h"
 #include "iPauseUI.h"
-#include "iTestUI.h"
+#include "iCreditUI.h"
 #include "iSettingUI.h"
 #include "iSound.h"
 #include "iTopMenuUI.h"
@@ -30,7 +30,7 @@ void loadUI()
 
 	loadEquipUI();
 
-	loadTestUI();
+	loadCreditUI();
 
 	createDimmedUI();
 
@@ -51,8 +51,8 @@ void loadUI()
 	inventoryLayer->key = keyInventoryUI;
 	equipLayer->draw = drawEquipUI;
 	equipLayer->key = keyEquipUI;
-	testLayer->draw = drawTestUI;
-	testLayer->key = keyTestUI;
+	testLayer->draw = drawCreditUI;
+	testLayer->key = keyCreditUI;
 
 	listLayer->addObject(inventoryLayer);
 	listLayer->addObject(equipLayer);
@@ -73,7 +73,7 @@ void freeUI()
 
 	freeDimmedUI();
 
-	freeTestUI();
+	freeCreditUI();
 
 	freeEquipUI();
 

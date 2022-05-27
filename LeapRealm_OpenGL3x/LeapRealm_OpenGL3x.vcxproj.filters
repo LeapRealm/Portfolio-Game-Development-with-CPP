@@ -90,7 +90,7 @@
     <ClInclude Include="rpg\iItemUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rpg\iTestUI.h">
+    <ClInclude Include="rpg\iCreditUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game\game.h">
@@ -222,7 +222,7 @@
     <ClCompile Include="rpg\iItemUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rpg\iTestUI.cpp">
+    <ClCompile Include="rpg\iCreditUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game\game.cpp">
@@ -271,6 +271,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rpg\iLogUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AppForCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

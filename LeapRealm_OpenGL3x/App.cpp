@@ -1,7 +1,10 @@
+#if (WIN32CTRL == 0)
+
 #include "App.h"
 
 #include "iWindow.h"
 #include "game.h"
+#include "iStd.h"
 
 static int win_border_width, win_border_height;
 
@@ -43,7 +46,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     float wndWidth	= mW * 2 / 3;
     float wndHeight = mH * 2 / 3;
 
-    hWnd = CreateWindowW(szWindowClass, szTitle, 
+    hWnd = CreateWindow(szWindowClass, szTitle, 
 				         WS_OVERLAPPEDWINDOW,
 				         wndWidth / 4, wndHeight / 4, 
 				         wndWidth, wndHeight, 
@@ -441,3 +444,5 @@ void setCurrentMonitor(RECT& rt)
 		memcpy(&rt, &mi.rcWork, sizeof(RECT));
 	}
 }
+
+#endif

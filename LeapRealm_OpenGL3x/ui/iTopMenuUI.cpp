@@ -4,13 +4,14 @@
 #include "iEquipUI.h"
 #include "iInventoryUI.h"
 #include "iPauseUI.h"
-#include "iTestUI.h"
+#include "iCreditUI.h"
 #include "iSettingUI.h"
 #include "iWindow.h"
 
 #define TopMenuHeight 80
 
 iPopup* topMenuUI;
+static iImage* imgBg;
 iImage** imgTopMenuBtn;
 
 void drawTopMenuBefore(float dt, iPopup* pop);
@@ -37,6 +38,7 @@ void loadTopMenuUI()
 	freeTexture(tex);
 
 	pop->addImage(img);
+	imgBg = img;
 
 	// imgTopMenuBtn[5]
 	// Pause, Inven, Equip, Map, Setting
@@ -135,7 +137,7 @@ bool keyTopMenuUI(iKeyState state, iPoint p)
 		}
 		else if (s == 3)
 		{
-			showTestUI(true);
+			showCreditUI(true);
 		}
 		else
 		{
@@ -169,6 +171,11 @@ bool keyTopMenuUI(iKeyState state, iPoint p)
 
 		break;
 	}
+	}
+
+	if (containPoint(p, imgBg->rect(topMenuUI->closePoint)))
+	{
+		return true;
 	}
 
 	return false;

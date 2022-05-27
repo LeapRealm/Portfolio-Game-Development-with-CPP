@@ -45,7 +45,6 @@ void MethodDeleteLogMsg(void* data)
 }
 
 void drawLogUIBefore(float dt, iPopup* pop);
-void drawLogUIAfter(float dt, iPopup* pop);
 
 void loadLogUI()
 {
@@ -113,7 +112,7 @@ void loadLogUI()
 	imgBar = img;
 
 	pop->style = iPopupStyleAlpha;
-	pop->openPoint = pop->closePoint = iPointMake(15, devSize.height / 2.0f);
+	pop->openPoint = pop->closePoint = iPointMake(15, devSize.height - 280.0f);
 	pop->animDt = 0.1f;
 	pop->methodDrawBefore = drawLogUIBefore;
 	popLogUI = pop;
@@ -217,7 +216,7 @@ void drawLogUI(float dt)
 }
 
 static bool logDrag = false;
-static iPoint prevPoint;
+static iPoint prevPoint = iPointZero;
 static float mDelta = 0.0f;
 bool keyLogUI(iKeyState state, iPoint p)
 {
@@ -338,7 +337,7 @@ bool keyLogUI(iKeyState state, iPoint p)
 	}
 	}
 
-	return true;
+	return false;
 }
 
 void showLogUI(bool isShow)
@@ -357,5 +356,3 @@ void addLogMessage(MsgAttr ma, const char* szFormat, ...)
 	lm->time = GetTickCount();
 	logMsgs->addObject(0, lm);
 }
-
-// TODO: 쉐이더 - 라인 4개로 내부가 비어있는 사각형 그리고 점점 커지면서 사라지게 하기

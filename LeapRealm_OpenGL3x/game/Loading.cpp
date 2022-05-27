@@ -1,5 +1,7 @@
 #include "Loading.h"
 
+#include "iStd.h"
+
 iGameState gs;
 
 static iGameState gsNew;

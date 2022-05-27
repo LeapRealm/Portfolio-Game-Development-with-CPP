@@ -1,6 +1,6 @@
 #pragma once
 
-#include "iStd.h"
+#include "iCommon.h"
 
 void loadMap();
 void freeMap();

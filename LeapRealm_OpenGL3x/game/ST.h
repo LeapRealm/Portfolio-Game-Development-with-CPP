@@ -8,4 +8,4 @@ void freeST();
 void drawST(float dt);
 void keyST(iKeyState state, iPoint p);
 
-extern iSTInfo stInfoTest[2][5];
+extern iSTInfo stInfoTest[5];

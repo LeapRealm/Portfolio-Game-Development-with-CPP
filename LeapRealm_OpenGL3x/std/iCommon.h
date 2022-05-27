@@ -19,6 +19,7 @@ struct iPoint;
 struct iSize;
 struct iRect;
 struct iMatrix;
+class iPopup;
 
 enum iKeyState
 {

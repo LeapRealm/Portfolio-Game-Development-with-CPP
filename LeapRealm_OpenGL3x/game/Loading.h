@@ -1,12 +1,8 @@
 #pragma once
 
-#include "iStd.h"
-
 enum iGameState
 {
-	iGameStateMenu = 0,
-	iGameStateMap,
-
+	iGameStateMap = 0,
 	iGameStateST,
 
 	iGameStateNone

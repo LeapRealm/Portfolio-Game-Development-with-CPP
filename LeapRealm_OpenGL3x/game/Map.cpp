@@ -1,8 +1,6 @@
 #include "Map.h"
 
-#include "iCaptionUI.h"
 #include "iItemUI.h"
-#include "iLogUI.h"
 #include "iUI.h"
 
 Texture* texUIBg;
@@ -26,6 +24,7 @@ void drawMap(float dt)
 	drawTexture(texUIBg, 0, 0,
 				devSize.width / texUIBg->width,
 				devSize.height / texUIBg->height, TOP | LEFT);
+
 	drawUI(dt);
 }
 

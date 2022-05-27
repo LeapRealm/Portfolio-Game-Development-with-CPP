@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "iStd.h"
+
 #include "Map.h"
 #include "Loading.h"
 #include "ST.h"
@@ -10,21 +12,19 @@ void loadGame()
 	audioVolume(1, 1, snd_eff_max);
 	audioPlay(snd_bgm_main);
 
-#if 1
-	loadMap();
 	gs = iGameStateMap;
 
-#else
-	loadST();
-	gs = iGameStateST;
-#endif
+	switch (gs)
+	{
+	case iGameStateMap:		loadMap();		break;
+	case iGameStateST:		loadST();		break;
+	}
 }
 
 void freeGame()
 {
 	switch (gs)
 	{
-	case iGameStateMenu: /* freeMenu(); */	break;
 	case iGameStateMap:		freeMap();		break;
 	case iGameStateST:		freeST();		break;
 	}
@@ -34,7 +34,6 @@ void drawGame(float dt)
 {
 	switch (gs)
 	{
-	case iGameStateMenu: /* drawMenu(dt); */break;
 	case iGameStateMap:		drawMap(dt);	break;
 	case iGameStateST:		drawST(dt);		break;
 	}
@@ -46,7 +45,6 @@ bool keyGame(iKeyState state, iPoint p)
 {
 	switch (gs)
 	{
-	case iGameStateMenu: /* keyMenu(state, p); */	break;
 	case iGameStateMap:		keyMap(state, p);		break;
 	case iGameStateST:		keyST(state, p);		break;
 	}

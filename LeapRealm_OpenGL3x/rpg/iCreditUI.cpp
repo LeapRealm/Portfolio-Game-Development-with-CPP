@@ -1,19 +1,19 @@
-#include "iTestUI.h"
+#include "iCreditUI.h"
 
 #include "iEquipUI.h"
 #include "iInventoryUI.h"
 #include "iTopMenuUI.h"
 #include "iUI.h"
 
-iTestUI::iTestUI() : iItemUI(0)
+iCreditUI::iCreditUI() : iItemUI(0)
 {
 }
 
-iTestUI::~iTestUI()
+iCreditUI::~iCreditUI()
 {
 }
 
-void iTestUI::setPopup()
+void iCreditUI::setPopup()
 {
 	iGraphics* g = new iGraphics();
 
@@ -32,11 +32,29 @@ void iTestUI::setPopup()
 
 	float stringSize = 25;
 	setStringSize(stringSize);
-	iRect rt = rectOfString("테스트창");
+	iRect rt = rectOfString("프로젝트 설명");
 	if (rt.size.width > (size.width - StrPadding))
 		setStringSize(stringSize * (size.width - StrPadding) / rt.size.width);
 
-	g->drawString(size.width / 2, 47, VCENTER | HCENTER, "테스트창");
+	g->drawString(size.width / 2, 47, VCENTER | HCENTER, "프로젝트 설명");
+
+	setStringName("assets/fonts/NanumSquareEB.ttf");
+	setStringRGBA(1, 1, 1, 1);
+	setStringBorder(0);
+	setStringSize(20);
+
+	g->drawString(size.width / 2, 135, VCENTER | HCENTER, "인벤토리 & 장비창 및 로그 기능 구현");
+
+	g->drawString(100, 210, VCENTER | HCENTER, "제작자");
+	g->drawString(100, 260, VCENTER | HCENTER, "사용기술");
+	g->drawString(100, 335, VCENTER | HCENTER, "사용언어");
+	g->drawString(100, 385, VCENTER | HCENTER, "제작기간");
+
+	g->drawString(200, 210, VCENTER | LEFT, "김진우");
+	g->drawString(200, 260, VCENTER | LEFT, "OpenGL 3.2");
+	g->drawString(200, 285, VCENTER | LEFT, "OpenAL 1.1");
+	g->drawString(200, 335, VCENTER | LEFT, "C++");
+	g->drawString(200, 385, VCENTER | LEFT, "약 3개월");
 
 	Texture* tex = g->getTexture();
 	iImage* img = new iImage();
@@ -73,109 +91,109 @@ void iTestUI::setPopup()
 	popup->style = iPopupStyleAlpha;
 	popup->openPoint = imgTopMenuBtn[3]->center(topMenuUI->closePoint);
 	popup->closePoint = iPointMake((devSize.width - 380) - 50, (devSize.height - 320) / 3);
-	popup->methodDrawBefore = drawTestUIBefore;
+	popup->methodDrawBefore = drawCreditUIBefore;
 
 	delete bg;
 	delete close;
 	delete g;
 }
 
-void iTestUI::paint(float dt)
+void iCreditUI::paint(float dt)
 {
 	popup->paint(dt);
 }
 
-void iTestUI::paintAfter(float dt)
+void iCreditUI::paintAfter(float dt)
 {
 
 }
 
-void drawTestUIBefore(float dt, iPopup* pop)
+void drawCreditUIBefore(float dt, iPopup* pop)
 {
-	testUI->imgBtn->frame = (0 == testUI->popup->selected);
+	creditUI->imgBtn->frame = (0 == creditUI->popup->selected);
 }
 
-iTestUI* testUI;
+iCreditUI* creditUI;
 
-void loadTestUI()
+void loadCreditUI()
 {
-	testUI = new iTestUI();
-	testUI->setPopup();
+	creditUI = new iCreditUI();
+	creditUI->setPopup();
 }
 
-void freeTestUI()
+void freeCreditUI()
 {
-	delete testUI;
+	delete creditUI;
 }
 
-void drawTestUI(float dt)
+void drawCreditUI(float dt)
 {
-	testUI->paint(dt);
+	creditUI->paint(dt);
 }
 
-bool keyTestUI(iKeyState state, iPoint p)
+bool keyCreditUI(iKeyState state, iPoint p)
 {
-	if (testUI->popup->isShow == false)
+	if (creditUI->popup->isShow == false)
 		return false;
-	if (testUI->popup->state != iPopupStateProc)
+	if (creditUI->popup->state != iPopupStateProc)
 		return true;
 
 	switch (state)
 	{
 	case iKeyStateBegan:
 	{
-		if (containPoint(p, testUI->imgBg->rect(testUI->popup->closePoint)))
+		if (containPoint(p, creditUI->imgBg->rect(creditUI->popup->closePoint)))
 		{
 			listLayer->removeObject(testLayer);
 			listLayer->addObject(testLayer);
 		}
 
-		if (containPoint(p, iRectMake(testUI->popup->closePoint.x, testUI->popup->closePoint.y, 300, 75)))
+		if (containPoint(p, iRectMake(creditUI->popup->closePoint.x, creditUI->popup->closePoint.y, 300, 75)))
 		{
-			testUI->isClicked = true;
-			selectedPos = testUI->popup->closePoint;
+			creditUI->isClicked = true;
+			selectedPos = creditUI->popup->closePoint;
 			mousePosition = p;
 			break;
 		}
 
-		int s = testUI->popup->selected;
+		int s = creditUI->popup->selected;
 		if (s == 0)
 		{
 			audioPlay(snd_eff_chest_close);
-			showTestUI(false);
+			showCreditUI(false);
 		}
 		break;
 	}
 
 	case iKeyStateMoved:
 	{
-		if (testUI->isClicked)
+		if (creditUI->isClicked)
 		{
 			selectedPos += (p - mousePosition);
-			testUI->popup->closePoint = selectedPos;
+			creditUI->popup->closePoint = selectedPos;
 			mousePosition = p;
 			break;
 		}
 
 		int j = -1;
-		if (containPoint(p, testUI->imgBtn->rect(testUI->popup->closePoint)))
+		if (containPoint(p, creditUI->imgBtn->rect(creditUI->popup->closePoint)))
 			j = 0;
-		testUI->popup->selected = j;
+		creditUI->popup->selected = j;
 		break;
 	}
 
 	case iKeyStateEnded:
 	{
-		if (testUI->isClicked)
+		if (creditUI->isClicked)
 		{
-			testUI->isClicked = false;
+			creditUI->isClicked = false;
 			break;
 		}
 		break;
 	}
 	}
 
-	if (containPoint(p, testUI->imgBg->rect(testUI->popup->closePoint)))
+	if (containPoint(p, creditUI->imgBg->rect(creditUI->popup->closePoint)))
 	{
 		hoveredIndex = -1;
 		inventoryUI->selectingSlot = -1;
@@ -186,9 +204,9 @@ bool keyTestUI(iKeyState state, iPoint p)
 	return false;
 }
 
-void showTestUI(bool isShow)
+void showCreditUI(bool isShow)
 {
-	if (isShow == testUI->popup->isShow)
+	if (isShow == creditUI->popup->isShow)
 		isShow = !isShow;
 
 	if (isShow)
@@ -196,5 +214,5 @@ void showTestUI(bool isShow)
 	else
 		audioPlay(snd_eff_chest_close);
 
-	testUI->popup->show(isShow);
+	creditUI->popup->show(isShow);
 }

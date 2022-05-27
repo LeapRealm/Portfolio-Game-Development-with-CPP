@@ -3,42 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LeapRealm", "LeapRealm\LeapRealm.vcxproj", "{4D11913F-1652-4568-8007-14BB24E5374B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LeapRealm_OpenGL1x", "LeapRealm_OpenGL1x\LeapRealm_OpenGL1x.vcxproj", "{1B82929D-1A65-4E6A-A1AA-7B80330F3958}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LeapRealm_OpenGL3x", "LeapRealm_OpenGL3x\LeapRealm_OpenGL3x.vcxproj", "{37584920-269D-4D75-9864-7A3724B37B93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Debug|x64.ActiveCfg = Debug|x64
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Debug|x64.Build.0 = Debug|x64
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Debug|x86.ActiveCfg = Debug|Win32
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Debug|x86.Build.0 = Debug|Win32
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Release|x64.ActiveCfg = Release|x64
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Release|x64.Build.0 = Release|x64
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Release|x86.ActiveCfg = Release|Win32
-		{4D11913F-1652-4568-8007-14BB24E5374B}.Release|x86.Build.0 = Release|Win32
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Debug|x64.ActiveCfg = Debug|x64
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Debug|x64.Build.0 = Debug|x64
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Debug|x86.ActiveCfg = Debug|Win32
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Debug|x86.Build.0 = Debug|Win32
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Release|x64.ActiveCfg = Release|x64
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Release|x64.Build.0 = Release|x64
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Release|x86.ActiveCfg = Release|Win32
-		{1B82929D-1A65-4E6A-A1AA-7B80330F3958}.Release|x86.Build.0 = Release|Win32
-		{37584920-269D-4D75-9864-7A3724B37B93}.Debug|x64.ActiveCfg = Debug|x64
-		{37584920-269D-4D75-9864-7A3724B37B93}.Debug|x64.Build.0 = Debug|x64
 		{37584920-269D-4D75-9864-7A3724B37B93}.Debug|x86.ActiveCfg = Debug|Win32
 		{37584920-269D-4D75-9864-7A3724B37B93}.Debug|x86.Build.0 = Debug|Win32
-		{37584920-269D-4D75-9864-7A3724B37B93}.Release|x64.ActiveCfg = Release|x64
-		{37584920-269D-4D75-9864-7A3724B37B93}.Release|x64.Build.0 = Release|x64
 		{37584920-269D-4D75-9864-7A3724B37B93}.Release|x86.ActiveCfg = Release|Win32
 		{37584920-269D-4D75-9864-7A3724B37B93}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection

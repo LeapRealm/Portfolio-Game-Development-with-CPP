@@ -1,6 +1,6 @@
 #pragma once
 
-#include "iStd.h"
+#include "iCommon.h"
 
 /*
 	프로젝트 생성시 설정할것.

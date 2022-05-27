@@ -1,7 +1,7 @@
 #pragma once
 
+#include "iCommon.h"
 #include "iItemUI.h"
-#include "iStd.h"
 
 #define EquipSlotMaxCnt 4
 

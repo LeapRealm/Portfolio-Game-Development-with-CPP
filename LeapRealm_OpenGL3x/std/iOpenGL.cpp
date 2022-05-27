@@ -34,9 +34,7 @@ void loadOpenGL(void* hdc)
 
 	glewExperimental = true;
 	GLenum err = glewInit();
-	if (GLEW_OK == err)
-		printf("GL(%s), GLSL(%s), GLEW(%s)\n", glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION), glewGetString(GLEW_VERSION));
-	else
+	if (GLEW_OK != err)
 		printf("Error: %s\n", glewGetErrorString(err));
 
 	if (wglewIsSupported("WGL_ARB_create_context"))
