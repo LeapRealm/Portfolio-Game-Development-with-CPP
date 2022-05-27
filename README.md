@@ -5,7 +5,7 @@
 
 [사용 기술]
 - OpenGL 3.2
-- OpenAL
+- OpenAL 1.1
 - C++
 
 [동영상]
