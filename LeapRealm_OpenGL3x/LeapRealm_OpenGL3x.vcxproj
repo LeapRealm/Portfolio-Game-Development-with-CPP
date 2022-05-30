@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32CTRL=0;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;GDIPVER=0x0110;GLEW_STATIC;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\OpenAL 1.1 SDK\include;.\std;.\game;.\rpg;.\ui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\OpenAL 1.1 SDK\include;.\std;.\game;.\rpg;.\ui;.\path;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -72,7 +72,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32CTRL=0;_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;GDIPVER=0x0110;GLEW_STATIC;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\OpenAL 1.1 SDK\include;.\std;.\game;.\rpg;.\ui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\OpenAL 1.1 SDK\include;.\std;.\game;.\rpg;.\ui;.\path;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -90,6 +90,8 @@
     <ClInclude Include="game\ST.h" />
     <ClInclude Include="game\Map.h" />
     <ClInclude Include="iWindow.h" />
+    <ClInclude Include="path\Path.h" />
+    <ClInclude Include="path\Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="rpg\iCaptionUI.h" />
     <ClInclude Include="rpg\iEquipUI.h" />
@@ -142,6 +144,8 @@
     <ClCompile Include="game\Map.cpp" />
     <ClCompile Include="glew.c" />
     <ClCompile Include="iWindow.cpp" />
+    <ClCompile Include="path\Path.cpp" />
+    <ClCompile Include="path\Player.cpp" />
     <ClCompile Include="rpg\iCaptionUI.cpp" />
     <ClCompile Include="rpg\iEquipUI.cpp" />
     <ClCompile Include="rpg\iInventory.cpp" />

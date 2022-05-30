@@ -138,6 +138,12 @@
     <ClInclude Include="rpg\iLogUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="path\Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="path\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LeapRealm_OpenGL3x.rc">
@@ -274,6 +280,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AppForCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="path\Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="path\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

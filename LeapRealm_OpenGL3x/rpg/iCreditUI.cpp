@@ -144,8 +144,8 @@ bool keyCreditUI(iKeyState state, iPoint p)
 	{
 		if (containPoint(p, creditUI->imgBg->rect(creditUI->popup->closePoint)))
 		{
-			listLayer->removeObject(testLayer);
-			listLayer->addObject(testLayer);
+			listLayer->removeObject(creditLayer);
+			listLayer->addObject(creditLayer);
 		}
 
 		if (containPoint(p, iRectMake(creditUI->popup->closePoint.x, creditUI->popup->closePoint.y, 300, 75)))

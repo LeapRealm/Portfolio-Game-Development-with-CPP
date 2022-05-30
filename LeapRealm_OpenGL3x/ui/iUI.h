@@ -18,4 +18,4 @@ bool keyUI(iKeyState state, iPoint p);
 extern iLinkedList* listLayer;
 extern Layer* inventoryLayer;
 extern Layer* equipLayer;
-extern Layer* testLayer;
+extern Layer* creditLayer;
