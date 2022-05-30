@@ -16,7 +16,7 @@
 iLinkedList* listLayer;
 Layer* inventoryLayer;
 Layer* equipLayer;
-Layer* testLayer;
+Layer* creditLayer;
 
 void loadUI()
 {
@@ -45,23 +45,23 @@ void loadUI()
 	listLayer = new iLinkedList();
 	inventoryLayer = new Layer();
 	equipLayer = new Layer();
-	testLayer = new Layer();
+	creditLayer = new Layer();
 
 	inventoryLayer->draw = drawInventoryUI;
 	inventoryLayer->key = keyInventoryUI;
 	equipLayer->draw = drawEquipUI;
 	equipLayer->key = keyEquipUI;
-	testLayer->draw = drawCreditUI;
-	testLayer->key = keyCreditUI;
+	creditLayer->draw = drawCreditUI;
+	creditLayer->key = keyCreditUI;
 
 	listLayer->addObject(inventoryLayer);
 	listLayer->addObject(equipLayer);
-	listLayer->addObject(testLayer);
+	listLayer->addObject(creditLayer);
 }
 
 void freeUI()
 {
-	delete testLayer;
+	delete creditLayer;
 	delete equipLayer;
 	delete inventoryLayer;
 	delete listLayer;
