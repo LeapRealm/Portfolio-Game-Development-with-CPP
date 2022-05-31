@@ -2,11 +2,10 @@
 
 #include "iCommon.h"
 
-#define TileWidth  32
-#define TileHeight 32
+#define TileWidth  30
+#define TileHeight 30
 
-extern int tileCountX, tileCountY, tileCountXY;
-extern uint8* mapData;
+extern iRect mapRect;
 
 void loadPath();
 void freePath();

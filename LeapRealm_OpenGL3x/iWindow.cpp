@@ -14,7 +14,7 @@ wchar_t* utf8_to_utf16(const char* szFormat, ...)
 	return ws;
 }
 
-char* utf16_to_utf8(wchar_t* str)
+char* utf16_to_utf8(const wchar_t* str)
 {
 	int length = WideCharToMultiByte(CP_UTF8, 0, str, lstrlen(str), nullptr, 0, nullptr, nullptr);
 	char* s = new char[length + 1];
@@ -25,18 +25,6 @@ char* utf16_to_utf8(wchar_t* str)
 }
 
 extern HWND hWnd;
-
-enum WndStyle
-{
-	WndStyleStatic = 0,
-	WndStyleButton,
-	WndStyleCheckBox,
-	WndStyleRadio,
-	WndStyleComboBox,
-	WndStyleListBox,
-	WndStyleEditBox,
-	WndStyleOpenGL,
-};
 
 struct WndCtrl
 {
@@ -586,22 +574,112 @@ float getWndFloat(HWND hwnd)
 	return n;
 }
 
-class iOpenGL
+class iCtrlOpenGL
 {
 public:
-	iOpenGL(int x, int y, int width, int height)
+	iCtrlOpenGL(int x, int y, int width, int height)
 	{
-		/*hwnd = CreateWindow(WC_STATIC, nullptr,
-			WS_CHILD | WS_VISIBLE | WS_BORDER
+		hwnd = CreateWindow(WC_STATIC, nullptr,
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
 			x, y, width, height, hWnd, (HMENU)wcNum,
-			(HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), nullptr);*/
+			(HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), nullptr);
 
 		addCtrl(hwnd, WndStyleOpenGL, nullptr);
 
-		hdc = GetDC(hwnd);
+		hDC = GetDC(hwnd);
+
+		// setup OpenGL
+		PIXELFORMATDESCRIPTOR pfd;
+		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+		pfd.nVersion = 1;
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW |
+			PFD_SUPPORT_OPENGL |
+			PFD_DOUBLEBUFFER;
+		pfd.iPixelType = PFD_TYPE_RGBA;
+		pfd.cColorBits = 32;
+		pfd.cDepthBits = 32;
+		pfd.iLayerType = PFD_MAIN_PLANE;
+
+		int pixelFormat = ChoosePixelFormat(hDC, &pfd);
+		SetPixelFormat(hDC, pixelFormat, &pfd);
+
+		hRC = wglCreateContext(hDC);
+		wglMakeCurrent(hDC, hRC);
+
+		glewExperimental = true;
+		GLenum err = glewInit();
+		if (GLEW_OK != err)
+			printf("Error: %s\n", glewGetErrorString(err));
+
+		if (wglewIsSupported("WGL_ARB_create_context"))
+		{
+			wglMakeCurrent(nullptr, nullptr);
+			wglDeleteContext(hRC);
+
+			int attr[] =
+			{
+				WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+				WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+				WGL_CONTEXT_FLAGS_ARB, 0,
+				0,
+			};
+			hRC = wglCreateContextAttribsARB(hDC, nullptr, attr);
+			wglMakeCurrent(hDC, hRC);
+
+			const char* strGL = (const char*)glGetString(GL_VERSION);
+			const char* strGLSL = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+			const char* strGLEW = (const char*)glewGetString(GLEW_VERSION);
+			printf("GL(%s), GLSL(%s), GLEW(%s)\n", strGL, strGLSL, strGLEW);
+		}
+
+		// init OpenGL
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+		//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);	// default, for android
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND_SRC);	// for ios, mac, window
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		glFrontFace(GL_CCW); // GL_CW
+		glDisable(GL_CULL_FACE);
+
+		// Drawing Region
+		devSize = iSizeMake(DEV_WIDTH, DEV_HEIGHT);
+		// viewport -> resizeOpenGL
+
+		glEnable(GL_BLEND);
+		//setGlBlendFunc(iBlendFuncAlpha);
+		glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Settings of Texture
+		setTexture(Linear, Clamp);
+
+		// Back or Front Buffer(Frame Buffer Object)
+		fbo = new iFBO(width, height);
+
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 4, nullptr, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glGenBuffers(1, &vbe);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbe);
+		uint8 indices[6] = { 0,1,2, 1,2,3 };
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint8) * 6, indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		matrixProject = new iMatrix;
+		matrixProject->loadIdentity();
+		matrixProject->ortho(0, width, height, 0, -1, 1);
+
+		matrixModelview = new iMatrix;
+		matrixModelview->loadIdentity();
 	}
 
-	virtual ~iOpenGL()
+	virtual ~iCtrlOpenGL()
 	{
 
 	}
@@ -626,26 +704,35 @@ public:
 
 public:
 	HWND hwnd;
-	HDC hdc;
+	HDC hDC;
+	HGLRC hRC;
+
+	iFBO* fbo;
+	GLuint vao, vbo, vbe;
+	iMatrix* matrixProject;
+	iMatrix* matrixModelview;
 
 	MethodUpdateGL methodUpdate;
 	MethodKeyGL methodKey;
 };
 
-iOpenGL** openGLs = nullptr;
+iCtrlOpenGL** openGLs = nullptr;
 int numOpenGL;
 
 HWND createWndOpenGL(int x, int y, int width, int height, MethodUpdateGL m0, MethodKeyGL m1)
 {
 	if (openGLs == nullptr)
 	{
-		openGLs = new iOpenGL * [100];
+		openGLs = new iCtrlOpenGL * [100];
 		numOpenGL = 0;
 	}
 
-	iOpenGL* ogl = new iOpenGL(x, y, width, height);
+	iCtrlOpenGL* ogl = new iCtrlOpenGL(x, y, width, height);
+	ogl->methodUpdate = m0;
+	ogl->methodKey = m1;
 	openGLs[numOpenGL] = ogl;
 	numOpenGL++;
+
 
 	return ogl->hwnd;
 }
@@ -657,7 +744,7 @@ void destroyAllWndOpenGL()
 	delete openGLs;
 }
 
-void updateWndOpenGL(float dt)
+void drawWndOpenGL(float dt)
 {
 	for (int i = 0; i < numOpenGL; i++)
 		openGLs[i]->paint(dt);

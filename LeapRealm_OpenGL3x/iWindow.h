@@ -22,8 +22,23 @@ char* utf16_to_utf8(const wchar_t* str);
 
 #include "iCommon.h"
 
+enum WndStyle
+{
+	WndStyleStatic = 0,
+	WndStyleButton,
+	WndStyleCheckBox,
+	WndStyleRadio,
+	WndStyleComboBox,
+	WndStyleListBox,
+	WndStyleEditBox,
+	WndStyleOpenGL,
+};
+
+typedef void (*MethodCtrlUpdate)(HWND hwnd);
+
 void initCtrl();
 void freeCtrl();
+void addCtrl(HWND hwnd, WndStyle style, MethodCtrlUpdate method);
 void updateCtrl(WPARAM wParam, LPARAM lParam);
 
 typedef void (*MethodDragFile)(const char* path);
@@ -35,8 +50,6 @@ const char* openFileDialog(bool isOpen, const char* filter);
 
 typedef void (*MethodChooseColor)(int r, int g, int b);
 void showChooseColor(MethodChooseColor method);
-
-typedef void (*MethodCtrlUpdate)(HWND hwnd);
 
 HWND createWndStatic(int x, int y, int width, int height, const char* str);
 HWND createWndButton(int x, int y, int width, int height, const char* str, MethodCtrlUpdate method);
@@ -84,10 +97,6 @@ char* getWndText(HWND hwnd);
 int getWndInt(HWND hwnd);
 float getWndFloat(HWND hwnd);
 
-typedef void (*MethodUpdateGL)(float);
-typedef void (*MethodKeyGL)(iKeyState, iPoint);
-
+typedef void (*MethodUpdateGL)(float dt);
+typedef void (*MethodKeyGL)(iKeyState state, iPoint p);
 HWND createWndOpenGL(int x, int y, int width, int height, MethodUpdateGL m0, MethodKeyGL m1);
-void destroyAllWndOpenGL();
-void updateWndOpenGL(float dt);
-void keyWndOpenGL(iKeyState state, iPoint p);

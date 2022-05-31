@@ -12,6 +12,7 @@ struct Player
 	int pathIdx;
 
 	float speed;
+	bool isDest = true;
 
 	void paint(float dt);
 	void move(float dt);

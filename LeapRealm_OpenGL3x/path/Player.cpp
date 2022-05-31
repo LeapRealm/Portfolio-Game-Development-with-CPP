@@ -1,18 +1,22 @@
 #include "Player.h"
 
+#include "iLogUI.h"
 #include "Path.h"
 
 void Player::paint(float dt)
 {
-	setLineWidth(5);
+	setLineWidth(12);
 	for (int i = 1; i < pathNum - 1; i++)
-		drawLine(path[i], path[i + 1]);
+		drawLine(path[i] + mapRect.origin, path[i + 1] + mapRect.origin);
 	setLineWidth(1);
 
-	fillRect(currPoint.x, currPoint.y, TileWidth, TileHeight, TileWidth / 2.0f);
+	setRGBA(1, 1, 1, 1);
+	fillRect(currPoint.x + mapRect.origin.x - (TileWidth / 2), currPoint.y + mapRect.origin.y - (TileHeight / 2), TileWidth, TileHeight, TileWidth / 2.0f);
+	setRGBA(1, 1, 1, 1);
 
 	if (currPoint != targetPoint)
 	{
+		isDest = false;
 		move(dt);
 	}
 	else
@@ -20,10 +24,16 @@ void Player::paint(float dt)
 		pathIdx++;
 		if (pathIdx < pathNum)
 		{
-			targetPoint = path[pathIdx] - iPointMake(TileWidth / 2.0f, TileHeight / 2.0);
+			isDest = false;
+			targetPoint = path[pathIdx];
 		}
 		else
 		{
+			if (isDest == false)
+			{
+				addLogMessage(MsgAttrWarning, "목적지에 도착했습니다.");
+				isDest = true;
+			}
 			pathIdx = 0;
 			pathNum = 0;
 		}
