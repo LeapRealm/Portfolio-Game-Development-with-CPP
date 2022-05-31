@@ -7,9 +7,8 @@
 // TODO: 맵 교체 버튼
 
 iRect mapRect;
-int tileCountX, tileCountY, tileCountXY;
 
-uint8 _mapData[3][16*16] = {
+static uint8 _mapData[3][TileCountXY] = {
 	{
 		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -67,20 +66,19 @@ uint8 _mapData[3][16*16] = {
 };
 
 static int mapIdx = 0;
-static uint8* mapData = _mapData[mapIdx];
+uint8* mapData = _mapData[mapIdx];
 
 iShortestPath* sp;
 Player* player;
 
 void loadPath()
 {
-	mapRect = iRectMake(devSize.width / 2 - 30, devSize.height / 2 - 210, 480, 480);
-	tileCountX = (int)mapRect.size.width / TileWidth;
-	tileCountY = (int)mapRect.size.height / TileHeight;
-	tileCountXY = tileCountX * tileCountY;
+	mapRect = iRectMake(devSize.width / 2 - TileWidth, 
+						devSize.height / 2 - (TileCountX * TileWidth / 2 - TileHeight), 
+						TileCountX * TileWidth, TileCountY * TileHeight);
 
 	sp = new iShortestPath();
-	sp->set(mapData, tileCountX, tileCountY, TileWidth, TileHeight);
+	sp->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
 
 	player = new Player;
 	player->speed = 400;
@@ -101,9 +99,22 @@ void drawPath(float dt)
 		mapIdx %= 3;
 		mapData = _mapData[mapIdx];
 
-		sp->set(mapData, tileCountX, tileCountY, TileWidth, TileHeight);
+		sp->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
 
-		player->currPoint = player->targetPoint = iPointMake(TileWidth / 2, TileHeight / 2);
+		int ix = player->currPoint.x / TileWidth;
+		int iy = player->currPoint.y / TileHeight;
+		int idx = iy * TileCountX + ix;
+
+		if (mapData[idx] == I)
+		{
+			addLogMessage(MsgAttrWarning, "벽이 존재하여 현재 위치가 초기화되었습니다.");
+			player->currPoint = player->targetPoint = iPointMake(TileWidth / 2, TileHeight / 2);
+		}
+		else
+		{
+			player->targetPoint = player->currPoint;
+		}
+
 		player->pathIdx = 0;
 		player->pathNum = 0;
 		player->isDest = true;
@@ -111,11 +122,11 @@ void drawPath(float dt)
 		addLogMessage(MsgAttrGeneral, "맵을 변경하였습니다.");
 	}
 
-	for (int j = 0; j < tileCountY; j++)
+	for (int j = 0; j < TileCountY; j++)
 	{
-		for (int i = 0; i < tileCountX; i++)
+		for (int i = 0; i < TileCountX; i++)
 		{
-			if (mapData[i + j * tileCountX] == I)
+			if (mapData[i + j * TileCountX] == I)
 			{
 				setRGBA(1.0f, 0.5f, 0, 0.8f);
 				fillRect((TileWidth * i + 2) + mapRect.origin.x, 
@@ -149,13 +160,14 @@ bool keyPath(iKeyState state, iPoint p)
 
 		int ix = px / TileWidth;
 		int iy = py / TileHeight;
-		if (ix < 0 || iy < 0 || ix > tileCountX - 1 || iy > tileCountY - 1)
+		if (ix < 0 || iy < 0 || ix > TileCountX - 1 || iy > TileCountY - 1)
 			break;
 
-		int idx = iy * tileCountX + ix;
+		int idx = iy * TileCountX + ix;
 		if (mapData[idx] == I)
 			break;
 
+		player->isDest = false;
 		addLogMessage(MsgAttrNotice, "(%d,%d)로 이동합니다.", ix, iy);
 
 		sp->run(player->currPoint, p - mapRect.origin, player->path, player->pathNum);

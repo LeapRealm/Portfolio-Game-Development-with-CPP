@@ -2,6 +2,10 @@
 
 #include "iCommon.h"
 
+#define TileCountX  16
+#define TileCountY  16
+#define TileCountXY (TileCountX * TileCountY)
+
 #define TileWidth  30
 #define TileHeight 30
 

@@ -4,6 +4,8 @@
 
 struct Player
 {
+	Player();
+
 	iPoint currPoint;
 	iPoint targetPoint;
 
@@ -12,7 +14,7 @@ struct Player
 	int pathIdx;
 
 	float speed;
-	bool isDest = true;
+	bool isDest;
 
 	void paint(float dt);
 	void move(float dt);

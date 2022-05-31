@@ -3,6 +3,19 @@
 #include "iLogUI.h"
 #include "Path.h"
 
+Player::Player()
+{
+	currPoint = iPointZero;
+	targetPoint = iPointZero;
+
+	memset(path, 0x00, sizeof(iPoint) * 100);
+	pathNum = 0;
+	pathIdx = 0;
+
+	speed = 0.0f;
+	isDest = true;
+}
+
 void Player::paint(float dt)
 {
 	setLineWidth(12);
@@ -16,7 +29,6 @@ void Player::paint(float dt)
 
 	if (currPoint != targetPoint)
 	{
-		isDest = false;
 		move(dt);
 	}
 	else
@@ -24,7 +36,6 @@ void Player::paint(float dt)
 		pathIdx++;
 		if (pathIdx < pathNum)
 		{
-			isDest = false;
 			targetPoint = path[pathIdx];
 		}
 		else
