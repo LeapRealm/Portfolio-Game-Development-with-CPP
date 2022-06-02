@@ -144,6 +144,12 @@
     <ClInclude Include="path\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="path\PathObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="path\StaticObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LeapRealm_OpenGL3x.rc">
@@ -286,6 +292,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="path\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="path\StaticObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,3 +15,8 @@ void loadPath();
 void freePath();
 void drawPath(float dt);
 bool keyPath(iKeyState state, iPoint p);
+
+void changeMap();
+void drawTile();
+void drawPathLine();
+void reorderLayer();

@@ -5,8 +5,8 @@
 
 Player::Player()
 {
-	currPoint = iPointZero;
-	targetPoint = iPointZero;
+	currLocalPos = iPointZero;
+	targetLocalPos = iPointZero;
 
 	memset(path, 0x00, sizeof(iPoint) * 100);
 	pathNum = 0;
@@ -16,18 +16,24 @@ Player::Player()
 	isDest = true;
 }
 
+iPoint Player::getCurrMapPos()
+{
+	return currLocalPos + mapRect.origin;
+}
+
 void Player::paint(float dt)
 {
-	setLineWidth(12);
-	for (int i = 1; i < pathNum - 1; i++)
-		drawLine(path[i] + mapRect.origin, path[i + 1] + mapRect.origin);
-	setLineWidth(1);
-
 	setRGBA(1, 1, 1, 1);
-	fillRect(currPoint.x + mapRect.origin.x - (TileWidth / 2), currPoint.y + mapRect.origin.y - (TileHeight / 2), TileWidth, TileHeight, TileWidth / 2.0f);
+	fillRect(getCurrMapPos().x - (TileWidth / 2),
+			 getCurrMapPos().y - TileHeight,
+			 TileWidth, TileHeight, TileWidth / 2.0f);
 	setRGBA(1, 1, 1, 1);
 
-	if (currPoint != targetPoint)
+	setRGBA(1, 0, 0, 1);
+	fillRect(getCurrMapPos().x - 2.5f, getCurrMapPos().y - 2.5f, 5, 5);
+	setRGBA(1, 1, 1, 1);
+
+	if (currLocalPos != targetLocalPos)
 	{
 		move(dt);
 	}
@@ -36,7 +42,7 @@ void Player::paint(float dt)
 		pathIdx++;
 		if (pathIdx < pathNum)
 		{
-			targetPoint = path[pathIdx];
+			targetLocalPos = path[pathIdx];
 		}
 		else
 		{
@@ -53,7 +59,7 @@ void Player::paint(float dt)
 
 void Player::move(float dt)
 {
-	iPoint v = targetPoint - currPoint;
+	iPoint v = targetLocalPos - currLocalPos;
 	float len = iPointLength(v);
 	if (len == 0)
 		return;
@@ -61,29 +67,29 @@ void Player::move(float dt)
 
 	v *= speed * dt;
 
-	if (currPoint.x < targetPoint.x)
+	if (currLocalPos.x < targetLocalPos.x)
 	{
-		currPoint.x += v.x;
-		if (currPoint.x > targetPoint.x)
-			currPoint.x = targetPoint.x;
+		currLocalPos.x += v.x;
+		if (currLocalPos.x > targetLocalPos.x)
+			currLocalPos.x = targetLocalPos.x;
 	}
-	else if (currPoint.x > targetPoint.x)
+	else if (currLocalPos.x > targetLocalPos.x)
 	{
-		currPoint.x += v.x;
-		if (currPoint.x < targetPoint.x)
-			currPoint.x = targetPoint.x;
+		currLocalPos.x += v.x;
+		if (currLocalPos.x < targetLocalPos.x)
+			currLocalPos.x = targetLocalPos.x;
 	}
 
-	if (currPoint.y < targetPoint.y)
+	if (currLocalPos.y < targetLocalPos.y)
 	{
-		currPoint.y += v.y;
-		if (currPoint.y > targetPoint.y)
-			currPoint.y = targetPoint.y;
+		currLocalPos.y += v.y;
+		if (currLocalPos.y > targetLocalPos.y)
+			currLocalPos.y = targetLocalPos.y;
 	}
-	else if (currPoint.y > targetPoint.y)
+	else if (currLocalPos.y > targetLocalPos.y)
 	{
-		currPoint.y += v.y;
-		if (currPoint.y < targetPoint.y)
-			currPoint.y = targetPoint.y;
+		currLocalPos.y += v.y;
+		if (currLocalPos.y < targetLocalPos.y)
+			currLocalPos.y = targetLocalPos.y;
 	}
 }

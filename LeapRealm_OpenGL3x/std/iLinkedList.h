@@ -22,8 +22,10 @@ public:
 	void removeAllObjects();
 
 	void* unlinkObject(int index);
+	void* unlinkObject(void* data);
 
 	void* getObjectByIndex(int index);
+	int getIndexByObject(void* data);
 
 public:
 	iNode* tail;

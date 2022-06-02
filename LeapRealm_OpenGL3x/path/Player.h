@@ -1,13 +1,14 @@
 #pragma once
 
 #include "iStd.h"
+#include "PathObject.h"
 
-struct Player
+struct Player : PathObject
 {
 	Player();
 
-	iPoint currPoint;
-	iPoint targetPoint;
+	iPoint currLocalPos;
+	iPoint targetLocalPos;
 
 	iPoint path[100];
 	int pathNum;
@@ -16,6 +17,8 @@ struct Player
 	float speed;
 	bool isDest;
 
-	void paint(float dt);
+	iPoint getCurrMapPos();
+
+	void paint(float dt) override;
 	void move(float dt);
 };

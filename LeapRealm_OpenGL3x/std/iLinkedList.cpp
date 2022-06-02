@@ -138,6 +138,12 @@ void* iLinkedList::unlinkObject(int index)
 	}
 }
 
+void* iLinkedList::unlinkObject(void* data)
+{
+	int idx = getIndexByObject(data);
+	return unlinkObject(idx);
+}
+
 void* iLinkedList::getObjectByIndex(int index)
 {
 	iNode* n = tail;
@@ -148,4 +154,16 @@ void* iLinkedList::getObjectByIndex(int index)
 		n = n->prev;
 	}
 	return nullptr;
+}
+
+int iLinkedList::getIndexByObject(void* data)
+{
+	iNode* n = tail;
+	for (int i = count - 1; i > -1; i--)
+	{
+		if (getObjectByIndex(i) == data)
+			return i;
+		n = n->prev;
+	}
+	return -1;
 }

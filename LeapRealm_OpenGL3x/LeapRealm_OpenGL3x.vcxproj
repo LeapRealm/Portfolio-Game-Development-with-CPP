@@ -91,7 +91,9 @@
     <ClInclude Include="game\Map.h" />
     <ClInclude Include="iWindow.h" />
     <ClInclude Include="path\Path.h" />
+    <ClInclude Include="path\PathObject.h" />
     <ClInclude Include="path\Player.h" />
+    <ClInclude Include="path\StaticObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="rpg\iCaptionUI.h" />
     <ClInclude Include="rpg\iEquipUI.h" />
@@ -146,6 +148,7 @@
     <ClCompile Include="iWindow.cpp" />
     <ClCompile Include="path\Path.cpp" />
     <ClCompile Include="path\Player.cpp" />
+    <ClCompile Include="path\StaticObject.cpp" />
     <ClCompile Include="rpg\iCaptionUI.cpp" />
     <ClCompile Include="rpg\iEquipUI.cpp" />
     <ClCompile Include="rpg\iInventory.cpp" />
