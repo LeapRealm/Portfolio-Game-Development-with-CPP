@@ -7,6 +7,13 @@ StaticObject::StaticObject()
 	rect.origin = iPointZero;
 	rect.size = iSizeZero;
 	isOverlap = false;
+
+	tex = createTexture("assets/path/tree.png");
+}
+
+StaticObject::~StaticObject()
+{
+	freeTexture(tex);
 }
 
 void StaticObject::setPosByIndex(int x, int y)
@@ -16,7 +23,6 @@ void StaticObject::setPosByIndex(int x, int y)
 
 void StaticObject::paint(float dt)
 {
-	setRGBA(1, 0, 1, 1);
-	fillRect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 	setRGBA(1, 1, 1, 1);
+	drawTexture(tex, rect.origin.x, rect.origin.y, rect.size.width / tex->width, rect.size.height / tex->height);
 }

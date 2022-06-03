@@ -7,7 +7,6 @@
 
 // TODO: 맵 교체 버튼
 
-iLinkedList* drawLayer;
 iRect mapRect;
 
 static uint8 _mapData[3][TileCountXY] = {
@@ -70,14 +69,17 @@ static uint8 _mapData[3][TileCountXY] = {
 static int mapIdx = 0;
 uint8* mapData = _mapData[mapIdx];
 
-iShortestPath* sp;
-Player* player;
+static iShortestPath* sp;
+static Player* player;
 
-iLinkedList* staticObjects;
+static iLinkedList* staticObjects;
 
-void deletePathObject(void* data)
+static iSort* sort = nullptr;
+static PathObject** po;
+
+void deleteStaticObject(void* data)
 {
-	delete (PathObject*)data;
+	delete (StaticObject*)data;
 }
 
 void loadPath()
@@ -89,33 +91,50 @@ void loadPath()
 	sp = new iShortestPath();
 	sp->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
 
-	staticObjects = new iLinkedList();
+	staticObjects = new iLinkedList(deleteStaticObject);
 
-	StaticObject* so = new StaticObject();
-	so->rect.size = iSizeMake(TileWidth * 3, TileHeight * 3);
-	so->setPosByIndex(4, 11);
-	staticObjects->addObject(so);
+	struct Tree
+	{
+		int x, y;
+	};
+	Tree tree[5] = 
+	{
+		{2, 11},
+		{5, 11},
+		{3,9},
+		{12,3},
+		{15, 4}
+	};
 
-	so = new StaticObject();
-	so->rect.size = iSizeMake(TileWidth * 3, TileHeight * 3);
-	so->setPosByIndex(9, 11);
-	staticObjects->addObject(so);
+	int cnt = sizeof(tree) / sizeof(Tree);
+	for (int i = 0; i < cnt; i++)
+	{
+		int x = tree[i].x;
+		int y = tree[i].y;
+
+		StaticObject* so = new StaticObject();
+		so->rect.size = iSizeMake(TileWidth * 3, TileHeight * 3);
+		so->setPosByIndex(x, y);
+		staticObjects->addObject(so);
+		mapData[(y + 2) * TileCountX + x + 0] = I;
+		mapData[(y + 2) * TileCountX + x + 1] = I;
+	}
 
 	player = new Player();
 	player->speed = 200;
 	player->currLocalPos = player->targetLocalPos = iPointMake(TileWidth / 2, TileHeight / 2);
 
-	drawLayer = new iLinkedList(deletePathObject);
-	for (int i = 0; i < staticObjects->count; i++)
-		drawLayer->addObject(staticObjects->getObjectByIndex(i));
-	drawLayer->addObject(player);
+	sort = new iSort();
+	po = new PathObject * [100];
 }
 
 void freePath()
 {
-	delete staticObjects;
-	delete drawLayer;
 	delete sp;
+	delete staticObjects;
+	delete player;
+	delete sort;
+	delete po;
 }
 
 void drawPath(float dt)
@@ -126,12 +145,21 @@ void drawPath(float dt)
 	drawTile();
 	drawPathLine();
 
-	reorderLayer();
-	for (int i = 0; i < drawLayer->count; i++)
+	sort->init();
+
+	for (int i = 0; i < staticObjects->count; i++)
 	{
-		PathObject* po = (PathObject*)drawLayer->getObjectByIndex(i);
-		po->paint(dt);
+		StaticObject* so = (StaticObject*)staticObjects->getObjectByIndex(i);
+		sort->add(i, so->rect.origin.y + so->rect.size.height);
+		po[i] = so;
 	}
+	sort->add(staticObjects->count, player->getCurrMapPos().y);
+	po[staticObjects->count] = player;
+
+	sort->update();
+
+	for(int i=0; i< sort->sdNum; i++)
+		po[sort->getIndex(sort->sdNum-1-i)]->paint(dt);
 }
 
 bool keyPath(iKeyState state, iPoint p)
@@ -193,34 +221,6 @@ void changeMap()
 	player->isDest = true;
 
 	addLogMessage(MsgAttrGeneral, "맵을 변경하였습니다.");
-}
-
-void reorderLayer()
-{
-	for (int i = 0; i < staticObjects->count; i++)
-	{
-		StaticObject* so = (StaticObject*)staticObjects->getObjectByIndex(i);
-
-		bool overlap;
-		if (containPoint(player->getCurrMapPos(), so->rect))
-			overlap = true;
-		else
-			overlap = false;
-
-		if (so->isOverlap != overlap)
-		{
-			so->isOverlap = overlap;
-
-			void* p = drawLayer->unlinkObject(player);
-
-			if (so->isOverlap)
-				drawLayer->addObject(0, p);
-			else
-				drawLayer->addObject(p);
-
-			break;
-		}
-	}
 }
 
 void drawTile()

@@ -1,6 +1,6 @@
 #if (WIN32CTRL == 1)
 
-#include "App.h"
+#include "AppForCtrl.h"
 
 #include "iWindow.h"
 #include "iStd.h"
@@ -11,7 +11,7 @@ HDC hDC;
 bool runApp = false;
 DWORD prevTime;
 bool* keys;
- 
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, 
 					  _In_opt_ HINSTANCE hPrevInstance, 
@@ -38,8 +38,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 	RegisterClassExW(&wcex);
 
-	float wndWidth	= 1280;
-	float wndHeight = 640;
+	float wndWidth	= 800;
+	float wndHeight = 800;
 
 	hWnd = CreateWindow(szWindowClass, szTitle, 
 						WS_OVERLAPPEDWINDOW,
@@ -47,20 +47,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 						wndWidth, wndHeight, 
 						nullptr, nullptr, hInstance, nullptr);
 
-	initCtrl();
-	void initTool();
-	initTool();
+	hDC = GetDC(hWnd);
+	loadOpenGL(hDC);
+
+	ShowWindow(hWnd, nShowCmd);
+	UpdateWindow(hWnd);
 
 	prevTime = GetTickCount();
 	keys = new bool[128];
 	memset(keys, false, sizeof(bool) * 128);
 	srand(time(nullptr));
 
-	ShowWindow(hWnd, nShowCmd);
-	UpdateWindow(hWnd);
+	loadCtrl();
+	loadTool();
 
 	runApp = true;
 	MSG msg;
+
 	while (runApp)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -74,10 +77,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			float delta = (now - prevTime) / 1000.f;
 			prevTime = now;
 
+			drawOpenGL(delta, drawGame);
 		}
 	}
 
 	freeCtrl();
+	freeTool();
+
+	freeOpenGL();
 	ReleaseDC(hWnd, hDC);
 	DestroyWindow(hWnd);
 
@@ -102,6 +109,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_KEYDOWN:
+	{
+		if (keys[wParam] == false)
+		{
+			setKeyPressed(true, wParam);
+			keys[wParam] = true;
+		}
+		break;
+	}
+
+	case WM_KEYUP:
+		setKeyPressed(false, wParam);
+		keys[wParam] = false;
+		break;
+
 	case WM_DROPFILES:
 		updateDrag(wParam, lParam);
 		break;
@@ -240,9 +262,19 @@ void setCurrentMonitor(RECT& rt)
 
 //////////////////////////////////////////////////////////////
 
-void initTool()
+void loadTool()
 {
-	createWndOpenGL(0, 0, 100, 100);
+
+}
+
+void freeTool()
+{
+	
+}
+
+void drawGame()
+{
+	
 }
 
 #endif

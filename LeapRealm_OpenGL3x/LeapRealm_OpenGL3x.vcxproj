@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="AppForCtrl.h" />
     <ClInclude Include="game\game.h" />
     <ClInclude Include="game\Loading.h" />
     <ClInclude Include="game\ST.h" />

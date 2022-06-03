@@ -19,4 +19,3 @@ bool keyPath(iKeyState state, iPoint p);
 void changeMap();
 void drawTile();
 void drawPathLine();
-void reorderLayer();

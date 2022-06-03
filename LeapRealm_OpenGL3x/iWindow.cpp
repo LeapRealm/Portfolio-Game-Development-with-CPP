@@ -37,7 +37,7 @@ WndCtrl* wc;
 #define WcMax 1000
 int wcNum = 0;
 
-void initCtrl()
+void loadCtrl()
 {
 	InitCommonControls();
 
@@ -707,8 +707,8 @@ public:
 	HDC hDC;
 	HGLRC hRC;
 
-	iFBO* fbo;
-	GLuint vao, vbo, vbe;
+
+	GLuint vao;
 	iMatrix* matrixProject;
 	iMatrix* matrixModelview;
 

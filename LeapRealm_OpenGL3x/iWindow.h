@@ -36,7 +36,7 @@ enum WndStyle
 
 typedef void (*MethodCtrlUpdate)(HWND hwnd);
 
-void initCtrl();
+void loadCtrl();
 void freeCtrl();
 void addCtrl(HWND hwnd, WndStyle style, MethodCtrlUpdate method);
 void updateCtrl(WPARAM wParam, LPARAM lParam);
