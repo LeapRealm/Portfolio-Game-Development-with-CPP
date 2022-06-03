@@ -17,5 +17,6 @@ void drawPath(float dt);
 bool keyPath(iKeyState state, iPoint p);
 
 void changeMap();
-void drawTile();
+void drawTiles();
 void drawPathLine();
+void drawPathObjects(float dt);

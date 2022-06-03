@@ -147,7 +147,7 @@
     <ClInclude Include="path\PathObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="path\StaticObject.h">
+    <ClInclude Include="path\Tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AppForCtrl.h">
@@ -297,7 +297,7 @@
     <ClCompile Include="path\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="path\StaticObject.cpp">
+    <ClCompile Include="path\Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

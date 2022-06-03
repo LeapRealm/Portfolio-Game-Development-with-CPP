@@ -17,7 +17,7 @@ struct Player : PathObject
 	float speed;
 	bool isDest;
 
-	iPoint getCurrMapPos();
+	iPoint getCurrWorldPos();
 
 	void paint(float dt) override;
 	void move(float dt);

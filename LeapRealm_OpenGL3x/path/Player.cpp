@@ -16,7 +16,7 @@ Player::Player()
 	isDest = true;
 }
 
-iPoint Player::getCurrMapPos()
+iPoint Player::getCurrWorldPos()
 {
 	return currLocalPos + mapRect.origin;
 }
@@ -24,13 +24,13 @@ iPoint Player::getCurrMapPos()
 void Player::paint(float dt)
 {
 	setRGBA(1, 1, 1, 1);
-	fillRect(getCurrMapPos().x - (TileWidth / 2),
-			 getCurrMapPos().y - TileHeight,
+	fillRect(getCurrWorldPos().x - (TileWidth / 2),
+			 getCurrWorldPos().y - TileHeight,
 			 TileWidth, TileHeight, TileWidth / 2.0f);
 	setRGBA(1, 1, 1, 1);
 
 	setRGBA(1, 0, 0, 1);
-	fillRect(getCurrMapPos().x - 2.5f, getCurrMapPos().y - 2.5f, 5, 5);
+	fillRect(getCurrWorldPos().x - 2.5f, getCurrWorldPos().y - 2.5f, 5, 5);
 	setRGBA(1, 1, 1, 1);
 
 	if (currLocalPos != targetLocalPos)

@@ -3,11 +3,7 @@
 #include "iLogUI.h"
 #include "iStd.h"
 #include "Player.h"
-#include "StaticObject.h"
-
-// TODO: 맵 교체 버튼
-
-iRect mapRect;
+#include "Tree.h"
 
 static uint8 _mapData[3][TileCountXY] = {
 	{
@@ -66,20 +62,22 @@ static uint8 _mapData[3][TileCountXY] = {
 	},
 };
 
-static int mapIdx = 0;
-uint8* mapData = _mapData[mapIdx];
+iRect mapRect;
 
-static iShortestPath* sp;
+static int mapIdx = 0;
+static uint8* mapData = _mapData[mapIdx];
+
+static iShortestPath* shortestPath;
 static Player* player;
 
-static iLinkedList* staticObjects;
+static iLinkedList* trees;
 
-static iSort* sort = nullptr;
-static PathObject** po;
+static iSort* sort;
+static PathObject** pathObjects;
 
-void deleteStaticObject(void* data)
+void deleteTree(void* data)
 {
-	delete (StaticObject*)data;
+	delete (Tree*)data;
 }
 
 void loadPath()
@@ -88,34 +86,34 @@ void loadPath()
 						devSize.height / 2 - (TileCountX * TileWidth / 2 - TileHeight), 
 						TileCountX * TileWidth, TileCountY * TileHeight);
 
-	sp = new iShortestPath();
-	sp->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
+	shortestPath = new iShortestPath();
+	shortestPath->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
 
-	staticObjects = new iLinkedList(deleteStaticObject);
+	trees = new iLinkedList(deleteTree);
 
-	struct Tree
+	struct TreePos
 	{
 		int x, y;
 	};
-	Tree tree[5] = 
+	TreePos treePoses[5] = 
 	{
 		{2, 11},
 		{5, 11},
 		{3,9},
-		{12,3},
-		{15, 4}
+		{10,3},
+		{13, 4}
 	};
 
-	int cnt = sizeof(tree) / sizeof(Tree);
+	int cnt = sizeof(treePoses) / sizeof(TreePos);
 	for (int i = 0; i < cnt; i++)
 	{
-		int x = tree[i].x;
-		int y = tree[i].y;
+		int x = treePoses[i].x;
+		int y = treePoses[i].y;
 
-		StaticObject* so = new StaticObject();
-		so->rect.size = iSizeMake(TileWidth * 3, TileHeight * 3);
-		so->setPosByIndex(x, y);
-		staticObjects->addObject(so);
+		Tree* tree = new Tree();
+		tree->rect.size = iSizeMake(TileWidth * 3, TileHeight * 3);
+		tree->setPosByIndex(x, y);
+		trees->addObject(tree);
 		mapData[(y + 2) * TileCountX + x + 0] = I;
 		mapData[(y + 2) * TileCountX + x + 1] = I;
 	}
@@ -125,16 +123,16 @@ void loadPath()
 	player->currLocalPos = player->targetLocalPos = iPointMake(TileWidth / 2, TileHeight / 2);
 
 	sort = new iSort();
-	po = new PathObject * [100];
+	pathObjects = new PathObject * [100];
 }
 
 void freePath()
 {
-	delete sp;
-	delete staticObjects;
+	delete shortestPath;
+	delete trees;
 	delete player;
 	delete sort;
-	delete po;
+	delete pathObjects;
 }
 
 void drawPath(float dt)
@@ -142,24 +140,13 @@ void drawPath(float dt)
 	if (getActionKeyPressed(KEY_SPACE))
 		changeMap();
 
-	drawTile();
+	drawTiles();
 	drawPathLine();
 
-	sort->init();
-
-	for (int i = 0; i < staticObjects->count; i++)
-	{
-		StaticObject* so = (StaticObject*)staticObjects->getObjectByIndex(i);
-		sort->add(i, so->rect.origin.y + so->rect.size.height);
-		po[i] = so;
-	}
-	sort->add(staticObjects->count, player->getCurrMapPos().y);
-	po[staticObjects->count] = player;
-
-	sort->update();
-
-	for(int i=0; i< sort->sdNum; i++)
-		po[sort->getIndex(sort->sdNum-1-i)]->paint(dt);
+	if (mapIdx == 0)
+		drawPathObjects(dt);
+	else
+		player->paint(dt);
 }
 
 bool keyPath(iKeyState state, iPoint p)
@@ -185,7 +172,7 @@ bool keyPath(iKeyState state, iPoint p)
 		player->isDest = false;
 		addLogMessage(MsgAttrNotice, "(%d,%d)로 이동합니다.", ix, iy);
 
-		sp->run(player->currLocalPos, p - mapRect.origin, player->path, player->pathNum);
+		shortestPath->run(player->currLocalPos, p - mapRect.origin, player->path, player->pathNum);
 		player->pathIdx = 0;
 
 		break;
@@ -200,7 +187,7 @@ void changeMap()
 	mapIdx %= 3;
 	mapData = _mapData[mapIdx];
 
-	sp->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
+	shortestPath->set(mapData, TileCountX, TileCountY, TileWidth, TileHeight);
 
 	int ix = player->currLocalPos.x / TileWidth;
 	int iy = player->currLocalPos.y / TileHeight;
@@ -223,7 +210,7 @@ void changeMap()
 	addLogMessage(MsgAttrGeneral, "맵을 변경하였습니다.");
 }
 
-void drawTile()
+void drawTiles()
 {
 	for (int j = 0; j < TileCountY; j++)
 	{
@@ -255,4 +242,23 @@ void drawPathLine()
 	for (int i = 1; i < player->pathNum - 1; i++)
 		drawLine(player->path[i] + mapRect.origin, player->path[i + 1] + mapRect.origin);
 	setLineWidth(1);
+}
+
+void drawPathObjects(float dt)
+{
+	sort->init();
+
+	for (int i = 0; i < trees->count; i++)
+	{
+		Tree* tree = (Tree*)trees->getObjectByIndex(i);
+		sort->add(i, tree->rect.origin.y + tree->rect.size.height);
+		pathObjects[i] = tree;
+	}
+	sort->add(trees->count, player->getCurrWorldPos().y);
+	pathObjects[trees->count] = player;
+
+	sort->update();
+
+	for (int i = 0; i < sort->sdNum; i++)
+		pathObjects[sort->getIndex(sort->sdNum - 1 - i)]->paint(dt);
 }
