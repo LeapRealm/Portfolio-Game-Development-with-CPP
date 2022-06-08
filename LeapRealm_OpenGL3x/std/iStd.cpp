@@ -4,8 +4,8 @@
 #include "iGraphics.h"
 #include "iWindow.h"
 
-static uint32 pressedAxisKeys = 0;
-static uint32 pressedActionKeys = 0;
+static uint32 _keys = 0;
+static uint32 _keyDowns = 0;
  
 static void _setKeyPressed(uint32& keys, bool isPressed, int key)
 {
@@ -43,28 +43,28 @@ void setKeyPressed(bool isPressed, int key)
 {
 	if (isPressed)
 	{
-		_setKeyPressed(pressedAxisKeys, isPressed, key);
-		_setKeyPressed(pressedActionKeys, isPressed, key);
+		_setKeyPressed(_keys, isPressed, key);
+		_setKeyPressed(_keyDowns, isPressed, key);
 	}
 	else
 	{
-		_setKeyPressed(pressedAxisKeys, isPressed, key);
+		_setKeyPressed(_keys, isPressed, key);
 	}
 }
 
-void updateActionKeyPressed()
+void updateKeyDown()
 {
-	pressedActionKeys = 0;
+	_keyDowns = 0;
 }
 
-bool getAxisKeyPressed(int key)
+bool getKey(int key)
 {
-	return pressedAxisKeys & key;
+	return _keys & key;
 }
 
-bool getActionKeyPressed(int key)
+bool getKeyDown(int key)
 {
-	return pressedActionKeys & key;
+	return _keyDowns & key;
 }
 
 iSize devSize;

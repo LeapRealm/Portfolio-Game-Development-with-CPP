@@ -137,7 +137,7 @@ void freePath()
 
 void drawPath(float dt)
 {
-	if (getActionKeyPressed(KEY_SPACE))
+	if (getKeyDown(KEY_SPACE))
 		changeMap();
 
 	drawTiles();

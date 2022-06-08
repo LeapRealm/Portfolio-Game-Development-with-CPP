@@ -49,10 +49,10 @@
 #define KEY_SHIFT	128
 
 void setKeyPressed(bool isPressed, int key);
-void updateActionKeyPressed();
+void updateKeyDown();
 
-bool getAxisKeyPressed(int key);
-bool getActionKeyPressed(int key);
+bool getKey(int key);
+bool getKeyDown(int key);
 
 #define DEV_WIDTH  1280
 #define DEV_HEIGHT 720

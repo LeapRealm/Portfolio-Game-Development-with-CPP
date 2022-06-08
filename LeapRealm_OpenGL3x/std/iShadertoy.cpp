@@ -233,27 +233,27 @@ void iShadertoy::paint(float dt)
 		glUniform1f(uid, iSampleRate);
 
 #if 1
-		float iActionKeys[5] = 
+		float iKeyDowns[5] = 
 		{
-			(float)getActionKeyPressed(KEY_LEFT),
-			(float)getActionKeyPressed(KEY_UP),
-			(float)getActionKeyPressed(KEY_RIGHT),
-			(float)getActionKeyPressed(KEY_DOWN),
-			(float)getActionKeyPressed(KEY_SPACE),
+			(float)getKeyDown(KEY_LEFT),
+			(float)getKeyDown(KEY_UP),
+			(float)getKeyDown(KEY_RIGHT),
+			(float)getKeyDown(KEY_DOWN),
+			(float)getKeyDown(KEY_SPACE),
 		};
-		uid = glGetUniformLocation(id, "iActionKeys");
-		glUniform1fv(uid, 5, iActionKeys);
+		uid = glGetUniformLocation(id, "iKeyDowns");
+		glUniform1fv(uid, 5, iKeyDowns);
 
-		float iAxisKeys[5] =
+		float iKeys[5] =
 		{
-			(float)getAxisKeyPressed(KEY_LEFT),
-			(float)getAxisKeyPressed(KEY_UP),
-			(float)getAxisKeyPressed(KEY_RIGHT),
-			(float)getAxisKeyPressed(KEY_DOWN),
-			(float)getAxisKeyPressed(KEY_SPACE),
+			(float)getKey(KEY_LEFT),
+			(float)getKey(KEY_UP),
+			(float)getKey(KEY_RIGHT),
+			(float)getKey(KEY_DOWN),
+			(float)getKey(KEY_SPACE),
 		};
-		uid = glGetUniformLocation(id, "iAxisKeys");
-		glUniform1fv(uid, 5, iAxisKeys);
+		uid = glGetUniformLocation(id, "iKeys");
+		glUniform1fv(uid, 5, iKeys);
 #endif
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbe);

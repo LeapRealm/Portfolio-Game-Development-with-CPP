@@ -202,7 +202,7 @@ void drawOpenGL(float dt, MethodDraw m)
 	fbo->bind();
 	iFBO::clear(0, 0, 0, 0);
 	m(dt); // drawGame
-	updateActionKeyPressed();
+	updateKeyDown();
 	drawCursor(dt);
 	fbo->unbind();
 
